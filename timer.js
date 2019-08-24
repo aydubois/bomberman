@@ -13,7 +13,9 @@ function bip(){
         stopTimer();
     }
     else{
-        timer.innerHTML = allTime;
+        let minutes = Math.floor(allTime/60);
+        let secondes = allTime - (60*minutes);
+        timer.innerHTML = minutes + " : " + secondes;
     }
 }
 function startTimer(){

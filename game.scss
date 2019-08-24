@@ -1,19 +1,54 @@
-$side_case:100%/15;
-
 *{
     box-sizing: border-box;
 }
+body{
+    background-color: #E4CD8E;
+}
+$radius : 20px;
+header{
+    background-color: beige;
+    padding: 0.7em 0 0.7em 0;
+    border-radius: $radius;
+
+    h1{
+        font-size: 3em;
+        font-family: 'Times New Roman', Times, serif;
+        text-align: center;
+    }
+}
+section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#start{
+    width: 20%;
+    height: 60px;
+    font-weight: bold;
+    font-size: x-large;
+    background-image:url("button.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: $radius;
+    margin-bottom: 10px;
+    margin-top: 10px;
+
+}
+
 #sentence{
     border: 2px solid green;
+    border-radius: $radius;
     width: 1000px;
     min-height: 40px;
     margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
+    text-align: center;
 }
 
 article{
     border: 2px solid violet;
+    border-radius: $radius;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,14 +57,24 @@ article{
     height: 500px;
     margin-left: 40px;
 
-    #timer{
+    #boxTimer{
         border: 2px solid orange;
+        border-radius: $radius;
         min-height: 100px;
         width: 140px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #E9996D; 
+
+        #timer{
+            font-weight: bold;
+            font-size: xx-large;
+        }
     }
 
     #score {
-        @extend #timer ;
+        @extend #boxTimer ;
         border-color: maroon;
     }
 }
@@ -40,12 +85,16 @@ article{
     justify-content: center;
 
 }
+
+$side_case:100%/15;
+
 #game{
     border: 2px solid black;
     width: 800px;
     height: 800px;
     display: flex;
     flex-wrap: wrap;
+    background-image: none;
 
     
 
@@ -58,4 +107,21 @@ article{
     }
 }
 
-
+@function randomNum($min, $max) {
+    $rand: random();
+    $randomNum: $min + floor($rand * (($max - $min) + 1));
+    @return $randomNum;
+}
+$i:0;
+@while $i <100{
+    .case[id="#{randomNum(1,225)}"]{
+        background-image: url("wallSoft.jpg");
+        background-size: cover;
+        background-color: black; 
+    }
+    $i: $i + 1;
+} 
+.case[lign="1"], .case[column="1"], .case[lign="15"], .case[column="15"] {
+    background-image: url("wallHard.jpg");
+    background-size: cover;
+}
