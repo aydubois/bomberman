@@ -1,0 +1,61 @@
+$side_case:100%/15;
+
+*{
+    box-sizing: border-box;
+}
+#sentence{
+    border: 2px solid green;
+    width: 1000px;
+    min-height: 40px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+article{
+    border: 2px solid violet;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    width: 150px;
+    height: 500px;
+    margin-left: 40px;
+
+    #timer{
+        border: 2px solid orange;
+        min-height: 100px;
+        width: 140px;
+    }
+
+    #score {
+        @extend #timer ;
+        border-color: maroon;
+    }
+}
+
+#main_wrapper{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+
+}
+#game{
+    border: 2px solid black;
+    width: 800px;
+    height: 800px;
+    display: flex;
+    flex-wrap: wrap;
+
+    
+
+    .case{
+        flex : 0 0 auto;
+        border: 2px solid red;
+        min-width: $side_case  ;
+        min-height: $side_case;
+
+    }
+}
+
+
