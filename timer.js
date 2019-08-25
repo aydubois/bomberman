@@ -20,4 +20,7 @@ function bip(){
 }
 function startTimer(){
     intervalId  = setInterval(bip, 1000);
+    if(allTime == 0){
+        allTime = 60*2;
+    }
 }
