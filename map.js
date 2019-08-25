@@ -1,7 +1,6 @@
 /* 
 Creation of the map
 */
-
 const game = document.getElementById('game');
 
 let widthGame = 15;

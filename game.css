@@ -96,26 +96,4 @@ article #score {
   min-height: 6.6666666667%;
 }
 
-/*
-@function randomNum($min, $max) {
-    $rand: random();
-    $randomNum: $min + floor($rand * (($max - $min) + 1));
-    @return $randomNum;
-}
-$i:0;
-
-@while $i <100{
-    .case[id="randomNum(1, 225)"]{
-        background-image: url("wallSoft.jpg");
-        background-size: cover;
-        background-color: black; 
-    }
-    $i: $i + 1;
-} 
-.case[row="1"], .case[column="1"], .case[row="15"], .case[column="15"] {
-    background-image: url("wallHard.jpg");
-    background-size: cover;
-}
-*/
-
 /*# sourceMappingURL=game.css.map */
