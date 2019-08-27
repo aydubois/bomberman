@@ -79,12 +79,16 @@ article #score {
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
+  position: relative;
+}
+
+#divPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 #game {
-  border: 2px solid black;
-  width: 800px;
-  height: 800px;
   display: flex;
   flex-wrap: wrap;
   background-image: none;
@@ -92,8 +96,8 @@ article #score {
 #game .case {
   flex: 0 0 auto;
   border: 2px solid red;
-  min-width: 6.6666666667%;
-  min-height: 6.6666666667%;
+  width: 50px;
+  height: 50px;
 }
 
 /*# sourceMappingURL=game.css.map */
