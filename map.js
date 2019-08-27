@@ -1,66 +1,80 @@
 /* 
 Creation of the map
 */
-const game = document.getElementById('game');
-
-let widthGame = 15;
-let heightGame = 15;
-let numberBlock = widthGame * heightGame;
-let i=1;
-while (numberBlock >0) {
-    const block = document.createElement('div');
-    block.className='case';
-    block.setAttribute('id', i);
-    block.setAttribute('row', Math.ceil(i/widthGame) );
-    block.setAttribute('column', NumColumn(i));
-    game.appendChild(block);
-    i++;
-    numberBlock--;
-}
-
-function NumColumn(i){
-    let result = i%widthGame;
-    if(result == 0){
-        return 15;
+import {randomNum} from './util.js';
+import {Player} from './players.js';
+export class Map{
+    constructor(width, height){
+        this.width = width;
+        this.height = height;
     }
-    else{
-    return result;}
-}
 
-/* 
-Creation of the decoration
-*/
-
-// Set up soft walls
-function randomNum(min, max){
-    let random = Math.random();
-    let randomNum = min + Math.floor(random *((max - min) + 1));
-    return randomNum;
-}
-
-function randomBlock(numberWall){
-    while(numberWall > 0){
-        let id = randomNum(1,(widthGame*heightGame))
-        const wall = document.getElementById(id);
-        if(!wall) {
-            console.log(id)
+    initSet(){
+        let i=0;
+        const game = document.getElementById('game');
+        for(let x=0; x<this.width; x++){
+            for(let y=0; y<this.height; y++){
+                const block = document.createElement('div');
+                block.className = 'case';
+                block.setAttribute('column', y);
+                block.setAttribute('row', x);
+                block.setAttribute('id', i);
+                game.appendChild(block);
+                i++;
+            }
         }
-        wall.style.backgroundImage = 'url("wallSoft.jpg")';
-        wall.style.backgroundSize = "cover";
-        wall.style.backgroundColor = "black";
-        numberWall--;
+        /*  Change map size on css 
+        const size = document.getElementsByClassName('case');
+        let j=0;
+        for(j=0; j<this.height; j++){
+            size.style.height = `"${this.height}"`;
+        }
+        for(j=0; j<this.width; j++){
+            size.style.width = `"${this.width}"`;
+        } */
+        
+        this.randomSoftWall(20);
+        this.hardWall();
+        this.initPlayer();
     }
-}
 
-randomBlock(100);
+    randomSoftWall(numberWall){
+        let maxBlock = this.width * this.height;
+        while(numberWall > 0){
+            let id = randomNum(0, (maxBlock - 1));
+            const wall = document.getElementById(id);
+            wall.style.backgroundImage = 'url("wallSoft.jpg")';
+            wall.style.backgroundSize = "cover";
+            wall.style.backgroundColor = "black";
+            numberWall--;
+        }
+    }
 
-// Set up hard walls
+    hardWall(){
+        const wallHard = document.querySelectorAll(`[row="0"],[row="${this.width - 1}"],[column="0"],[column="${this.height - 1}"]`);
 
-const wallHard = document.querySelectorAll(`[row="1"],[row="${widthGame}"],[column="1"],[column="${heightGame}"]`);
+        for( let block of wallHard){
+            block.style.backgroundImage = 'url("wallHard.jpg")';
+            block.style.backgroundSize = "cover";
+            block.style.backgroundColor = "black";
+        }
 
-for( let block of wallHard){
-    block.style.backgroundImage = 'url("wallHard.jpg")';
-    block.style.backgroundSize = "cover";
-    block.style.backgroundColor = "black";
+    }
+
+    initPlayer(){
+        let maxBlock = this.width * this.height;
+        for(let i=0; i<(maxBlock-1); i++){
+            const block = document.getElementById(i);
+            if(!block.style.backgroundImage ){
+                block.style.backgroundImage = 'url("player1.png")';
+                block.style.backgroundSize = "cover";
+                block.setAttribute("name", "player1");
+            
+
+                let player1 = new Player();
+                break;
+            }
+        }
+    }
 }
 

@@ -1,0 +1,33 @@
+# for linux with selinux: sudo chcon -Rt svirt_sandbox_file_t .
+version: '3'
+services:
+  web:
+      image: nginx:latest
+      ports:
+          - "8000:80"
+      volumes:
+          - .:/var/www
+          - ./default.conf:/etc/nginx/conf.d/default.conf
+      links:
+          - php
+
+  php:
+      build:
+        context: .
+        dockerfile: ./php.dockerfile
+      volumes:
+          - .:/var/www
+
+  database:
+      image: mariadb:latest
+      env_file:
+            - ".env"
+      environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+      ports:
+          - "4000:3306"
+      volumes:
+          - ./mysql:/var/lib/mysql
