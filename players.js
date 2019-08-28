@@ -9,6 +9,7 @@ export class Player{
         this.life = 1;
 
         this.startListening();
+        this.listeningBomb();
     }
 
 
@@ -60,11 +61,33 @@ export class Player{
         player.style.top = (this.y * widthCase) + "px";
         }
 
-    bomb(){
-    
-    }
+    listeningBomb(){
 
-    canBomb(){
+        document.addEventListener('keydown', (event)=>{
+            if(event.keyCode == 32) {
+                this.putBomb();
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        });
+    }
+    putBomb(){
+        const player = document.getElementById("player1");
+        let left = player.style.left;
+        let top = player.style.top;
+
+        const bomb = document.createElement('div');
+        bomb.style.position = "absolute";
+        bomb.className = 'bomb';
+        bomb.setAttribute("id", "bomb1");
+        bomb.style.width = widthCase + "px"; // A changer si changment dans scss
+        bomb.style.height = widthCase + "px";
+        bomb.style.left = parseInt(left, 10) + "px"; 
+        bomb.style.top = parseInt(top, 10) + "px"; 
+        bomb.style.backgroundImage = 'url("bomb.png")';
+        bomb.style.backgroundSize = "cover";
+        const divPlayer = document.getElementById("divPlayer");
+        divPlayer.appendChild(bomb);
 
     }
 }
