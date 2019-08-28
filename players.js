@@ -7,6 +7,7 @@ export class Player{
         this.x = 1;
         this.y = 1;
         this.life = 1;
+        this.lastBomb = [];
 
         this.startListening();
         this.listeningBomb();
@@ -72,29 +73,38 @@ export class Player{
         });
     }
     putBomb(){
+        // search position of player
         const player = document.getElementById("player1");
-        let left = player.style.left;
-        let top = player.style.top;
-
+        let left = parseInt(player.style.left);
+        let top = parseInt(player.style.top);
+        
+        //create bomb
         const bomb = document.createElement('div');
         bomb.style.position = "absolute";
         bomb.className = 'bomb';
         bomb.setAttribute("id", "bomb1");
         bomb.style.width = widthCase + "px"; // A changer si changment dans scss
         bomb.style.height = widthCase + "px";
-        bomb.style.left = parseInt(left, 10) + "px"; 
-        bomb.style.top = parseInt(top, 10) + "px"; 
+        bomb.style.left = left + "px"; 
+        bomb.style.top = top + "px"; 
         bomb.style.backgroundImage = 'url("bomb.png")';
         bomb.style.backgroundSize = "cover";
-        const divPlayer = document.getElementById("divPlayer");
-        divPlayer.appendChild(bomb);
+        
+        const caseBomb = document.querySelector(`[row="${top/widthCase}"][column="${left/widthCase}"]`);
+        caseBomb.appendChild(bomb);
 
-
+        //update map.grounds and coordinate
         let x = parseInt(bomb.style.left)/widthCase;
         let y =parseInt(bomb.style.top)/widthCase;
         map.grounds[y][x].top = y;
         map.grounds[y][x].left = x;
         map.grounds[y][x].bomb = true;
+        this.lastBomb.push({
+            x:x,
+            y:y
+        });
+        //trigger detonate
+        this.triggerDetonate();
     }
 
     canBomb(){
@@ -102,12 +112,34 @@ export class Player{
         let left = parseInt(player.style.left)/widthCase;
         let top = parseInt(player.style.top)/widthCase;
 
+        //check not an over bomb 
         if(left == map.grounds[top][left].left && top == map.grounds[top][left].top){
             return;
         }
         else{
             this.putBomb();
         }
+    }
+
+    triggerDetonate(){
+        let timeBomb = 5*1000;
+        setTimeout( ()=>{this.detonate()}, timeBomb);
+    }
+
+    detonate(){ 
+        let last = this.lastBomb.length-1;
+        let lastX = this.lastBomb[last].x;
+        let lastY = this.lastBomb[last].y;
         
+        let lastCase = document.getElementById("bomb1");
+        lastCase.style.backgroundImage = "none";
+
+        map.grounds[this.lastBomb[last].y][this.lastBomb[last].x].bomb = false;
+        map.grounds[this.lastBomb[last].y][this.lastBomb[last].x].top = 0;
+        map.grounds[this.lastBomb[last].y][this.lastBomb[last].x].left = 0;
+        
+        
+
+
     }
 }
