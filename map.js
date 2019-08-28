@@ -33,7 +33,10 @@ export class Map{
                     x:x,
                     y:y,
                     hardWall:false,
-                    softWall:false
+                    softWall:false,
+                    bomb:false,
+                    top:0,
+                    left:0
                 });
                 const block = document.createElement('div');
                 block.className = 'case';

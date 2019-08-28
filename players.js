@@ -65,7 +65,7 @@ export class Player{
 
         document.addEventListener('keydown', (event)=>{
             if(event.keyCode == 32) {
-                this.putBomb();
+                this.canBomb();
                 event.preventDefault();
                 event.stopPropagation();
             }
@@ -89,5 +89,25 @@ export class Player{
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(bomb);
 
+
+        let x = parseInt(bomb.style.left)/widthCase;
+        let y =parseInt(bomb.style.top)/widthCase;
+        map.grounds[y][x].top = y;
+        map.grounds[y][x].left = x;
+        map.grounds[y][x].bomb = true;
+    }
+
+    canBomb(){
+        const player = document.getElementById("player1");
+        let left = parseInt(player.style.left)/widthCase;
+        let top = parseInt(player.style.top)/widthCase;
+
+        if(left == map.grounds[top][left].left && top == map.grounds[top][left].top){
+            return;
+        }
+        else{
+            this.putBomb();
+        }
+        
     }
 }
