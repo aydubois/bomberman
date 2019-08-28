@@ -1,26 +1,45 @@
-let allTime = 60*2;
-let intervalId = null;
+export class Timer {
 
-const timer = document.getElementById('timer');
+    constructor() {
+        this.timerText = document.getElementById("timer");
+        this.timeLeft = null;
+        this.wholeTime = 0, 5 * 60;
+        this.finished = false;
+        this.timer(2*60);
+    }
 
-function stopTimer(){
-    clearInterval(intervalId);
-    timer.innerHTML = "END GAME";
-}
-function bip(){
-    allTime--;
-    if(allTime <= 0 ){
-        stopTimer();
+    //displayTimeLeft(wholeTime);
+
+    changeWholeTime(seconds) {
+        if ((wholeTime + seconds) > 0) {
+            wholeTime += seconds;
+        }
     }
-    else{
-        let minutes = Math.floor(allTime/60);
-        let secondes = allTime - (60*minutes);
-        timer.innerHTML = minutes + " : " + secondes;
+
+    timer(seconds) { //counts time, takes seconds
+        let remainTime = Date.now() + (seconds * 1000);
+        this.displayTimeLeft(seconds);
+
+        let intervalTimer = setInterval(() => {
+            let timeLeft = Math.round((remainTime - Date.now()) / 1000);
+            if (timeLeft <= 0) {
+                clearInterval(intervalTimer);
+                this.displayTimeLeft(this.wholeTime);
+                this.finished = true;
+                return;
+            }
+            this.displayTimeLeft(timeLeft);
+        }, 1000);  
     }
-}
-function startTimer(){
-    intervalId  = setInterval(bip, 1000);
-    if(allTime == 0){
-        allTime = 60*2;
+
+
+
+    displayTimeLeft(timeLeft) { //displays time on the input
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        let displayString = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        this.timerText.textContent = displayString;
+
     }
+
 }

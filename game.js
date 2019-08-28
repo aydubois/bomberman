@@ -1,6 +1,6 @@
-import {Map} from "./map.js";
+import {map} from "./map.js";
+import { Player } from "./players.js";
 
+map.initSet(15,15);
 
-let map = new Map(15, 15);
-map.initSet();
-
+let player1 = new Player();

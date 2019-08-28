@@ -1,8 +1,11 @@
+import {widthCase} from './constants.js';
+import {map} from "./map.js";
+
 export class Player{
     
     constructor(){
-        this.x = 0;
-        this.y = 0;
+        this.x = 1;
+        this.y = 1;
         this.life = 1;
 
         this.startListening();
@@ -10,102 +13,51 @@ export class Player{
 
 
     startListening(){
-        document.addEventListener('keyup', (event)=>{
+        document.addEventListener('keydown', (event)=>{
             if(event.keyCode == 37) {
                 //left
-                this.move(-1, 0);
+                this.tryMove(-1, 0);
+                event.preventDefault();
+                event.stopPropagation();
             }
         });
-        document.addEventListener('keyup', (event)=>{
+        document.addEventListener('keydown', (event)=>{
             if(event.keyCode == 39){
                 //right
-                this.move(1, 0);
+                this.tryMove(1, 0);
+                event.preventDefault();
+                event.stopPropagation();
             }
         });
-        document.addEventListener('keyup', (event)=> {
+        document.addEventListener('keydown', (event)=> {
             if(event.keyCode == 40){
                 //down
-                this.move(0, -1);
+                this.tryMove(0, -1);
+                event.preventDefault();
+                event.stopPropagation();
             }
         })
-        document.addEventListener('keyup', (event)=>{
+        document.addEventListener('keydown', (event)=>{
             if(event.keyCode == 38){
                 //up
-                this.move(0, 1);
+                this.tryMove(0, 1);
+                event.preventDefault();
+                event.stopPropagation();
             }
         })
     }
+
+    tryMove(x,y){
+        map.move(this, x, y);
+    }
+
     move(x,y){
-        if(x > 0){ // right
-            const player = document.querySelector('div[name]');
-            let initY = player.getAttribute("row");
-            let initX = player.getAttribute("column");
-            let finalX = parseInt(initX, 10) + 1;
-            
-            // search new position of player
-            const newCase = document.querySelector(`[column = "${finalX}"][row="${initY}"]`)
-            newCase.style.backgroundImage = 'url("player1.png")';
-            newCase.style.backgroundSize = "cover";
-            newCase.setAttribute("name", "player1");
-            
-            //remove last position
-            player.removeAttribute("name");
-            player.style.backgroundImage = "none";
-        }
+        this.x = x;
+        this.y = y;
 
-        else if(x < 0){ // left
-            const player = document.querySelector('div[name]');
-            let initY = player.getAttribute("row");
-            let initX = player.getAttribute("column");
-            let finalX = parseInt(initX, 10) - 1;
-            
-            // search new position of player
-            const newCase = document.querySelector(`[column = "${finalX}"][row="${initY}"]`)
-            newCase.style.backgroundImage = 'url("player1.png")';
-            newCase.style.backgroundSize = "cover";
-            newCase.setAttribute("name", "player1");
-            
-            //remove last position
-            player.removeAttribute("name");
-            player.style.backgroundImage = "none";
-        }
-        
-        else if(y > 0){ //down
-            const player = document.querySelector('div[name]');
-            let initY = player.getAttribute("row");
-            let initX = player.getAttribute("column");
-            let finalY = parseInt(initY, 10) - 1;
-            
-            // search new position of player
-            const newCase = document.querySelector(`[column = "${initX}"][row="${finalY}"]`)
-            newCase.style.backgroundImage = 'url("player1.png")';
-            newCase.style.backgroundSize = "cover";
-            newCase.setAttribute("name", "player1");
-            
-            //remove last position
-            player.removeAttribute("name");
-            player.style.backgroundImage = "none";
-        }
-
-        else if(y < 0){ // up
-            const player = document.querySelector('div[name]');
-            let initY = player.getAttribute("row");
-            let initX = player.getAttribute("column");
-            let finalY = parseInt(initY, 10) + 1;
-            
-            // search new position of player
-            const newCase = document.querySelector(`[column = "${initX}"][row="${finalY}"]`)
-            newCase.style.backgroundImage = 'url("player1.png")';
-            newCase.style.backgroundSize = "cover";
-            newCase.setAttribute("name", "player1");
-            
-            //remove last position
-            player.removeAttribute("name");
-            player.style.backgroundImage = "none";
-        }
-
-
-
+        const player = document.getElementById("player1");
+        player.style.left = (this.x * widthCase) + "px";
+        player.style.top = (this.y * widthCase) + "px";
         }
 
     bomb(){
