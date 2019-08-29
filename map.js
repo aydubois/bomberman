@@ -22,13 +22,11 @@ export class Map{
         game.style.width = (widthCase * this.columns) + "px";
         game.style.height = (widthCase * this.rows) + "px";
         
-        const divPlayer = document.getElementById('divPlayer');
-        divPlayer.style.width = (widthCase * this.columns) + "px";
-        divPlayer.style.height = (widthCase * this.rows) + "px";
 
         for(let y=0; y<this.rows; y++){
             this.grounds.push([]);
             for(let x=0; x<this.columns; x++){
+                const block = document.createElement('div');
                 this.grounds[y].push({
                     x:x,
                     y:y,
@@ -36,9 +34,10 @@ export class Map{
                     softWall:false,
                     bomb:false,
                     top:0,
-                    left:0
+                    left:0,
+                    block
                 });
-                const block = document.createElement('div');
+                
                 block.className = 'case';
                 block.setAttribute('column', x);
                 block.setAttribute('row', y);

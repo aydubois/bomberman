@@ -13,12 +13,13 @@ export class Player {
     constructor() {
         this.x = 1;
         this.y = 1;
-        this.life = 1;
         this.bombs = [];
         this.sizeArray = 0;
+        this.bonus = new Bonus;
 
         this.startListening();
         this.listeningBomb();
+
     }
 
 
@@ -83,15 +84,15 @@ export class Player {
     putBomb() {
 
         // search position of player
-        const player = document.getElementById("player1");
-        let left = parseInt(player.style.left);
-        let top = parseInt(player.style.top);
+        let left = this.x * widthCase;
+        let top = this.y * widthCase;
 
         //create bomb
+        let id = "bomb" + this.bombs.length;
         const bomb = document.createElement('div');
         bomb.style.position = "absolute";
         bomb.className = 'bomb';
-        bomb.setAttribute("id", "bomb" + this.sizeArray);
+        bomb.setAttribute("id", id);
         bomb.style.width = widthCase + "px"; // A changer si changment dans scss
         bomb.style.height = widthCase + "px";
         bomb.style.left = left + "px";
@@ -104,125 +105,168 @@ export class Player {
         this.sizeArray++
 
         //update map.grounds and coordinate
-        let x = parseInt(bomb.style.left) / widthCase;
-        let y = parseInt(bomb.style.top) / widthCase;
-        map.grounds[y][x].top = y;
-        map.grounds[y][x].left = x;
-        map.grounds[y][x].bomb = true;
-        let id = bomb.getAttribute("id");
-
-        this.bombs.push({
+        let x = this.x;
+        let y = this.y;
+        let b = {
             x: x,
             y: y,
+            bomb: bomb,
             id: id
-        });
+        }
+        map.grounds[y][x].bomb = b;
+        
+        this.bombs.push(b);
         //trigger detonate
-        this.triggerDetonate(id, x, y);
+        this.triggerDetonate(b);
 
     }
 
     canBomb() {
-        const player = document.getElementById("player1");
-        let left = parseInt(player.style.left) / widthCase;
-        let top = parseInt(player.style.top) / widthCase;
 
         //check not an over bomb 
-        if (left == map.grounds[top][left].left && top == map.grounds[top][left].top) {
+        if (map.grounds[this.y][this.x].bomb) {
             return;
         } else {
             this.putBomb();
         }
     }
 
-    triggerDetonate(id, x, y) {
+    triggerDetonate(bomb) {
         let timeBomb = 5 * 1000;
-        setTimeout(() => {
-            this.detonate(id, x, y)
+        let timeout = setTimeout(() => {
+            bomb.timeout = null
+            this.detonate(bomb)
         }, timeBomb);
+        bomb.timeout = timeout
+        
 
 
     }
 
-    detonate(id, x, y) {
-
-        let i = this.bombs.length;
+    detonate(bomb) {
 
         //search bomb to detonate and remove attributes
-        for (let j = 0; j < i; j++) {
-            if (Object.values(this.bombs[j][2] == id)) {
-                console.log("yes");
-                let lastCase = document.getElementById(id);
-                lastCase.style.backgroundImage = "none";
-
-                let lastX = this.bombs[j].x;
-                let lastY = this.bombs[j].y;
-                map.grounds[y][x].bomb = false;
-                map.grounds[y][x].top = 0;
-                map.grounds[y][x].left = 0;
-
-
-                /// search wall and remove it
-                this.detonateWallLeft(x, y)
-                this.detonateWallRight(x, y)
-                this.detonateWallBottom(x, y)
-                this.detonateWallTop(x, y)
-            }
-        }
+        map.grounds[bomb.y][bomb.x].bomb = false;
+        bomb.bomb.remove()
+        let x = bomb.x;
+        let y = bomb.y;
+        this.detonateLeft(x, y)
+        this.detonateRight(x, y)
+        this.detonateBottom(x, y)
+        this.detonateTop(x, y)
     }
 
-    detonateWallLeft(x, y) {
+    detonateLeft(x, y) {
         for (let k = 1; k < 3; k++) { //around 3 cases
-            if (!map.grounds[y][x - k] || !map.grounds[y]) {
+            if (!map.grounds[y][x - k] || !map.grounds[y] || map.grounds[y][x - k].hardWall == true) {
                 return;
-            } else if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
-                let left = document.querySelector(`[row="${y}"][column="${x-k}"]`);
+            }
+            this.flame(x - k, y);
+            if (x - k == this.x && y == this.y) {
+                this.bonus.removeLife();
+            }
 
-                left.style.backgroundImage = "none";
-                left.style.backgroundColor = "#E4CD8E";
+            if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
+
                 map.grounds[y][x - k].softWall = false;
+                break;
             }
         }
+
     }
 
-    detonateWallRight(x, y) {
+    detonateRight(x, y) {
         for (let k = 1; k < 3; k++) {
-            if (!map.grounds[y][x + k] || !map.grounds[y]) {
+            if (!map.grounds[y][x + k] || !map.grounds[y] || map.grounds[y][x + k].hardWall == true) {
                 return;
-            } else if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
-                let right = document.querySelector(`[row="${y}"][column="${x+k}"]`);
-                right.style.backgroundImage = "none";
-                right.style.backgroundColor = "#E4CD8E";
+            }
+            this.flame(x + k, y);
+            if (x + k == this.x && y == this.y) {
+                this.bonus.removeLife();
+            }
+            if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
+
                 map.grounds[y][x + k].softWall = false;
+                break;
             }
+
+
         }
     }
 
-    detonateWallTop(x, y) {
+    detonateTop(x, y) {
         for (let k = 1; k < 3; k++) {
-            if (!map.grounds[y - k] || !map.grounds[y - k][x]) {
+            if (!map.grounds[y - k] || !map.grounds[y - k][x] || map.grounds[y - k][x].hardWall == true) {
                 return;
-            } else if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
-                let top = document.querySelector(`[row="${y-k}"][column="${x}"]`);
-                top.style.backgroundImage = "none";
-                top.style.backgroundColor = "#E4CD8E";
+            }
+            this.flame(x, y - k);
+            if (x == this.x && y - k == this.y) {
+                this.bonus.removeLife();
+
+            }
+            if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
+
                 map.grounds[y - k][x].softWall = false;
+                break;
             }
         }
     }
 
-    detonateWallBottom(x, y) {
+    detonateBottom(x, y) {
         for (let k = 1; k < 3; k++) {
-            if (!map.grounds[y + k] || !map.grounds[y + k][x]) {
+            if (!map.grounds[y + k] || !map.grounds[y + k][x] || map.grounds[y + k][x].hardWall == true) {
                 return;
-            } else if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
-                let bottom = document.querySelector(`[row="${y+k}"][column="${x}"]`);
-                bottom.style.backgroundImage = "none";
-                bottom.style.backgroundColor = "#E4CD8E";
+            }
+
+            this.flame(x, y + k);
+            if (x == this.x && y + k == this.y) {
+                this.bonus.removeLife();
+
+            }
+            if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
+
                 map.grounds[y + k][x].softWall = false;
+                break;
+            }
+
+        }
+    }
+
+    flame(xFlame, yFlame) {
+
+        const flame = document.createElement("div");
+        flame.style.backgroundImage = 'url("flame.gif")';
+        flame.style.backgroundSize = "cover";
+        flame.style.opacity = 0.70;
+        flame.style.backgroundColor = "#E4CD8E";
+        flame.style.position = "absolute";
+        flame.style.width = widthCase + "px";
+        flame.style.height = widthCase + "px";
+        flame.style.left = xFlame * widthCase + "px";
+        flame.style.top = yFlame * widthCase + "px";
+        const divPlayer = document.getElementById("divPlayer");
+        divPlayer.appendChild(flame);
+
+        
+        if(map.grounds[yFlame][xFlame].bomb) 
+        {
+
+            if(map.grounds[yFlame][xFlame].bomb.timeout) {
+                clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
+                map.grounds[yFlame][xFlame].bomb.timeout = null;
+                setTimeout(()=>{
+                    this.detonate(map.grounds[yFlame][xFlame].bomb)
+                }, 150)
+                
             }
         }
+        setTimeout(() => {
+            map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
+            map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
+            flame.remove();
+        }, 1000)
+
     }
 }
 
-//// supprimer wall quand détonation
 /// ajouter bonus à chaque perso
