@@ -50,7 +50,7 @@ export class Map{
             
         }
         console.log(this.grounds);
-        this.randomSoftWall(40);
+        this.randomSoftWall(100);
         this.hardWall();
         this.start();
         

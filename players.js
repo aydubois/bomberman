@@ -4,6 +4,9 @@ import {
 import {
     map
 } from "./map.js";
+import {
+    Bonus
+} from "./bonus.js";
 
 export class Player {
 
@@ -114,7 +117,7 @@ export class Player {
             id: id
         });
         //trigger detonate
-        this.triggerDetonate(id);
+        this.triggerDetonate(id, x, y);
 
     }
 
@@ -131,16 +134,16 @@ export class Player {
         }
     }
 
-    triggerDetonate(id) {
+    triggerDetonate(id, x, y) {
         let timeBomb = 5 * 1000;
         setTimeout(() => {
-            this.detonate(id)
+            this.detonate(id, x, y)
         }, timeBomb);
 
 
     }
 
-    detonate(id) {
+    detonate(id, x, y) {
 
         let i = this.bombs.length;
 
@@ -153,11 +156,52 @@ export class Player {
 
                 let lastX = this.bombs[j].x;
                 let lastY = this.bombs[j].y;
-                map.grounds[lastY][lastX].bomb = false;
-                map.grounds[lastY][lastX].top = 0;
-                map.grounds[lastY][lastX].left = 0;
-                
-                break;
+                map.grounds[y][x].bomb = false;
+                map.grounds[y][x].top = 0;
+                map.grounds[y][x].left = 0;
+
+                /// search wall and remove it
+                for (let k = 1; k < 3; k++) { //around 3 cases
+                    if (!map.grounds[y][x - k]) {
+                        return;
+                    } else if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
+                        let left = document.querySelector(`[row="${y}"][column="${x-k}"]`);
+
+                        left.style.backgroundImage = "none";
+                        map.grounds[y][x - k].softWall = false;
+                    }
+
+
+
+                    if (!map.grounds[y][x + k]) {
+                        return;
+                    } else if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
+                        let right = document.querySelector(`[row="${y}"][column="${x+k}"]`);
+                        right.style.backgroundImage = "none";
+                        map.grounds[y][x + k].softWall = false;
+                    }
+
+
+
+                    if (!map.grounds[y - k][x]) {
+                        return;
+                    } else if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
+                        let top = document.querySelector(`[row="${y-k}"][column="${x}"]`);
+                        top.style.backgroundImage = "none";
+                        map.grounds[y - k][x].softWall = false;
+                    }
+
+
+                    if (!map.grounds[y + k][x]) {
+                        return;
+                    } else if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
+                        let bottom = document.querySelector(`[row="${y+k}"][column="${x}"]`);
+                        bottom.style.backgroundImage = "none";
+                        map.grounds[y + k][x].softWall = false;
+                    }
+                }
+                console.log(map.grounds) // !!!!!probleme de delai si plusieurs bombes 
+
 
             } else {
                 console.log(no)
@@ -167,3 +211,6 @@ export class Player {
 
     }
 }
+
+//// supprimer wall quand détonation
+/// ajouter bonus à chaque perso
