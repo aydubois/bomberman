@@ -160,55 +160,67 @@ export class Player {
                 map.grounds[y][x].top = 0;
                 map.grounds[y][x].left = 0;
 
+
                 /// search wall and remove it
-                for (let k = 1; k < 3; k++) { //around 3 cases
-                    if (!map.grounds[y][x - k]) {
-                        return;
-                    } else if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
-                        let left = document.querySelector(`[row="${y}"][column="${x-k}"]`);
-
-                        left.style.backgroundImage = "none";
-                        map.grounds[y][x - k].softWall = false;
-                    }
-
-
-
-                    if (!map.grounds[y][x + k]) {
-                        return;
-                    } else if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
-                        let right = document.querySelector(`[row="${y}"][column="${x+k}"]`);
-                        right.style.backgroundImage = "none";
-                        map.grounds[y][x + k].softWall = false;
-                    }
-
-
-
-                    if (!map.grounds[y - k][x]) {
-                        return;
-                    } else if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
-                        let top = document.querySelector(`[row="${y-k}"][column="${x}"]`);
-                        top.style.backgroundImage = "none";
-                        map.grounds[y - k][x].softWall = false;
-                    }
-
-
-                    if (!map.grounds[y + k][x]) {
-                        return;
-                    } else if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
-                        let bottom = document.querySelector(`[row="${y+k}"][column="${x}"]`);
-                        bottom.style.backgroundImage = "none";
-                        map.grounds[y + k][x].softWall = false;
-                    }
-                }
-                console.log(map.grounds) // !!!!!probleme de delai si plusieurs bombes 
-
-
-            } else {
-                console.log(no)
+                this.detonateWallLeft(x, y)
+                this.detonateWallRight(x, y)
+                this.detonateWallBottom(x, y)
+                this.detonateWallTop(x, y)
             }
         }
+    }
 
+    detonateWallLeft(x, y) {
+        for (let k = 1; k < 3; k++) { //around 3 cases
+            if (!map.grounds[y][x - k] || !map.grounds[y]) {
+                return;
+            } else if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
+                let left = document.querySelector(`[row="${y}"][column="${x-k}"]`);
 
+                left.style.backgroundImage = "none";
+                left.style.backgroundColor = "#E4CD8E";
+                map.grounds[y][x - k].softWall = false;
+            }
+        }
+    }
+
+    detonateWallRight(x, y) {
+        for (let k = 1; k < 3; k++) {
+            if (!map.grounds[y][x + k] || !map.grounds[y]) {
+                return;
+            } else if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
+                let right = document.querySelector(`[row="${y}"][column="${x+k}"]`);
+                right.style.backgroundImage = "none";
+                right.style.backgroundColor = "#E4CD8E";
+                map.grounds[y][x + k].softWall = false;
+            }
+        }
+    }
+
+    detonateWallTop(x, y) {
+        for (let k = 1; k < 3; k++) {
+            if (!map.grounds[y - k] || !map.grounds[y - k][x]) {
+                return;
+            } else if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
+                let top = document.querySelector(`[row="${y-k}"][column="${x}"]`);
+                top.style.backgroundImage = "none";
+                top.style.backgroundColor = "#E4CD8E";
+                map.grounds[y - k][x].softWall = false;
+            }
+        }
+    }
+
+    detonateWallBottom(x, y) {
+        for (let k = 1; k < 3; k++) {
+            if (!map.grounds[y + k] || !map.grounds[y + k][x]) {
+                return;
+            } else if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
+                let bottom = document.querySelector(`[row="${y+k}"][column="${x}"]`);
+                bottom.style.backgroundImage = "none";
+                bottom.style.backgroundColor = "#E4CD8E";
+                map.grounds[y + k][x].softWall = false;
+            }
+        }
     }
 }
 
