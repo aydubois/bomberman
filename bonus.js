@@ -1,4 +1,5 @@
 import { map } from "./map.js";
+import { widthCase } from "./constants.js";
 
 
 export class Attributes {
@@ -14,16 +15,28 @@ export class Attributes {
 
     }
 
-    removeLife() {
+    removeLife(x,y) {
+        if(map.grounds[y][x].flame == true){
         this.attribut.life--;
         document.getElementById("sentence").textContent = "YOU LOST A LIFE";
-        
+
         if (this.attribut.life <= 0) {
             this.dead = true;
             document.getElementById("player1").remove();
             document.getElementById("sentence").textContent = "YOU LOST, TRY AGAIN";
-        }
+            document.getElementById("start").textContent = "Remise à zéro";
+            let end = document.createElement("div");
+            end.textContent = " END OF THE GAME"
+            end.style.width = 500 + "px";
+            end.style.height = 500 + "px";
+            end.style.backgroundColor = "beige"
+            document.getElementById("main_wrapper").replaceChild(end, game);
+            document.getElementById("main_wrapper").removeChild(divPlayer);
 
+
+
+        }
+    }
     }
 
     addLife(x, y) {

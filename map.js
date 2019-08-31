@@ -37,6 +37,7 @@ export class Map{
                     softWall:false,
                     bonus:false,
                     bonusName:null,
+                    flame:false,
                     bomb:false,
                     top:0,
                     left:0,
@@ -129,10 +130,14 @@ export class Map{
     start(){
         let startButton = document.getElementById("start");
         startButton.addEventListener("click", ()=>{
+            if(!document.getElementById("divPlayer")){
+                document.location.reload(true)
+            }
             if(this.starter == null || this.starter.finished == true){
             this.starter = new Timer();
             this.initPlayer();}
         })
+
     }
 
     initPlayer(){

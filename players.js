@@ -22,7 +22,6 @@ export class Player {
 
 
     }
-
     /**
      * start listening to the player's movements
      * left, right, down, up
@@ -90,6 +89,7 @@ export class Player {
         this.attributes.addLife(x,y);
         this.attributes.addBomb(x,y);
         this.attributes.addDamageBomb(x,y);
+        this.attributes.removeLife(x,y)
     }
 
     /**
@@ -220,7 +220,7 @@ export class Player {
             }
             this.flame(x - k, y);
             if (x - k == this.x && y == this.y) {
-                console.log("t'es mourru")
+                return;
             }
 
             if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
@@ -336,6 +336,7 @@ export class Player {
         flame.style.zIndex = 2;
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(flame);
+        map.grounds[yFlame][xFlame].flame = true;
 
 
         if (map.grounds[yFlame][xFlame].bomb) {
@@ -352,11 +353,12 @@ export class Player {
         setTimeout(() => {
             map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
             map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
+            map.grounds[yFlame][xFlame].flame = false;
             flame.remove();
         }, 1000)
 
         if(xFlame == this.x && yFlame == this.y){
-            this.attributes.removeLife();}
+            this.attributes.removeLife(this.x, this.y);}
     }
 }
 
