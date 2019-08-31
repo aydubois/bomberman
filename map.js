@@ -5,11 +5,15 @@ import {randomNum} from './util.js';
 import {Timer} from './timer.js';
 
 import {widthCase} from './constants.js';
+import {styleCase} from './constants.js';
 
 export class Map{
 
     constructor(){
         this.grounds = [];
+        this.bonusItems = [
+            "life", "bomb"
+        ]
     }
 
     initSet(rows, columns){
@@ -32,6 +36,7 @@ export class Map{
                     hardWall:false,
                     softWall:false,
                     bonus:false,
+                    bonusName:null,
                     bomb:false,
                     top:0,
                     left:0,
@@ -81,26 +86,29 @@ export class Map{
         }
     }
     /**
-     * If id softWall odd  => add bonus
+     * If id softWall =  peer  => add bonus
      * @param {*} x Position x softWall
      * @param {*} y Position y softWall
+     * @param {*} id id softwall
      */
-    bonus(x, y, id){
+    bonus(x,y, id){
         if(id%2 == 0){
+        let randomItem = randomNum(0, this.bonusItems.length-1);
         let bonus = document.createElement("div");
         bonus.className = "bonus";
-        bonus.style.position = "absolute";
         bonus.setAttribute("x", x);
         bonus.setAttribute("y", y);
+        bonus.setAttribute("item", this.bonusItems[randomItem])
+        styleCase(bonus)
         bonus.style.left = x * widthCase + "px";
         bonus.style.top = y * widthCase + "px";
-        bonus.style.width = widthCase + "px";
-        bonus.style.height = widthCase + "px";
-        bonus.style.backgroundImage = 'url("bonusHeart.jpeg")';
-        bonus.style.backgroundSize = "cover";
+        bonus.style.backgroundImage = `url("bonus${this.bonusItems[randomItem]}.jpeg")`;
         bonus.style.zIndex = -1;
         document.getElementById("divPlayer").appendChild(bonus);
-        this.grounds[y][x].bonus = true;}
+        this.grounds[y][x].bonus = true;
+        this.grounds[y][x].bonusName = this.bonusItems[randomItem];
+        }
+
     }
     hardWall(){
         const wallHard = document.querySelectorAll(`[row="0"],[row="${this.rows - 1}"],[column="0"],[column="${this.columns - 1}"]`);
@@ -130,15 +138,10 @@ export class Map{
     initPlayer(){
         if(!document.getElementById("player1")){
         const player = document.createElement('div');
-        player.style.position = "absolute";
         player.className = 'player';
         player.setAttribute("id", "player1");
-        player.style.width = widthCase + "px"; // A changer si changment dans scss
-        player.style.height = widthCase + "px";
-        player.style.left =widthCase + "px"; 
-        player.style.top = widthCase + "px"; 
+        styleCase(player);
         player.style.backgroundImage = 'url("player1.png")';
-        player.style.backgroundSize = "cover";
         player.style.zIndex = 2;
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(player);
@@ -154,7 +157,6 @@ export class Map{
             player.move(xFinal, yFinal);
         }
     }
-
 }
 
 export const map = new Map(); 

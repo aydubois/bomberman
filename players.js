@@ -1,5 +1,5 @@
 import {
-    widthCase
+    widthCase, styleCase
 } from './constants.js';
 import {
     map
@@ -87,7 +87,8 @@ export class Player {
         const player = document.getElementById("player1");
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
-        this.attributes.addLife(x,y)
+        this.attributes.addLife(x,y);
+        this.attributes.addBomb(x,y);
     }
 
     /**
@@ -129,6 +130,7 @@ export class Player {
 
         const caseBomb = document.querySelector(`[row="${top/widthCase}"][column="${left/widthCase}"]`);
         caseBomb.appendChild(bomb);
+        this.attributes.attribut.actuelBomb++;
         this.sizeArray++
 
         //update map.grounds and coordinate
@@ -156,9 +158,16 @@ export class Player {
         //check not an over bomb 
         if (map.grounds[this.y][this.x].bomb) {
             return;
-        } else {
+        }
+        else if (this.attributes.attribut.actuelBomb == this.attributes.attribut.maxBombs){
+            return;
+        }
+        else {
             this.putBomb();
         }
+
+        //check max bomb
+        
     }
 
     /**
@@ -166,7 +175,7 @@ export class Player {
      * @param {*} bomb Object => last bomb 
      */
     triggerDetonate(bomb) {
-        let timeBomb = 5 * 1000;
+        let timeBomb = 1 * 1000;
         let timeout = setTimeout(() => {
             bomb.timeout = null
             this.detonate(bomb)
@@ -182,6 +191,7 @@ export class Player {
         //search bomb to detonate and remove attributes
         map.grounds[bomb.y][bomb.x].bomb = null;
         bomb.bomb.remove()
+        this.attributes.attribut.actuelBomb--;
         let index = this.bombs.indexOf(bomb);
         if (index != -1) {
             this.bombs.splice(index, 1);
@@ -317,14 +327,12 @@ export class Player {
 
         const flame = document.createElement("div");
         flame.style.backgroundImage = 'url("flame.gif")';
-        flame.style.backgroundSize = "cover";
         flame.style.opacity = 0.70;
         flame.style.backgroundColor = "#E4CD8E";
-        flame.style.position = "absolute";
-        flame.style.width = widthCase + "px";
-        flame.style.height = widthCase + "px";
+        styleCase(flame);
         flame.style.left = xFlame * widthCase + "px";
         flame.style.top = yFlame * widthCase + "px";
+        flame.style.zIndex = 2;
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(flame);
 
