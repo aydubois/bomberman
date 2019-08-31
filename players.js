@@ -89,6 +89,7 @@ export class Player {
         player.style.top = (this.y * widthCase) + "px";
         this.attributes.addLife(x,y);
         this.attributes.addBomb(x,y);
+        this.attributes.addDamageBomb(x,y);
     }
 
     /**
@@ -213,7 +214,7 @@ export class Player {
      * @param {*} y Position y of bomb
      */
     detonateLeft(x, y) {
-        for (let k = 1; k < 3; k++) { //around 3 cases
+        for (let k = 1; k < this.attributes.attribut.damageBomb; k++) { //around 3 cases
             if (!map.grounds[y][x - k] || !map.grounds[y] || map.grounds[y][x - k].hardWall == true) {
                 return;
             }
@@ -241,7 +242,7 @@ export class Player {
      * @param {*} y Position y of bomb
      */
     detonateRight(x, y) {
-        for (let k = 1; k < 3; k++) {
+        for (let k = 1; k < this.attributes.attribut.damageBomb; k++) {
             if (!map.grounds[y][x + k] || !map.grounds[y] || map.grounds[y][x + k].hardWall == true) {
                 return;
             }
@@ -268,7 +269,7 @@ export class Player {
      * @param {*} y Position y of bomb
      */
     detonateTop(x, y) {
-        for (let k = 1; k < 3; k++) {
+        for (let k = 1; k < this.attributes.attribut.damageBomb; k++) {
             if (!map.grounds[y - k] || !map.grounds[y - k][x] || map.grounds[y - k][x].hardWall == true) {
                 return;
             }
@@ -294,7 +295,7 @@ export class Player {
      * @param {*} y Position y of bomb
      */
     detonateBottom(x, y) {
-        for (let k = 1; k < 3; k++) {
+        for (let k = 1; k < this.attributes.attribut.damageBomb; k++) {
             if (!map.grounds[y + k] || !map.grounds[y + k][x] || map.grounds[y + k][x].hardWall == true) {
                 return;
             }

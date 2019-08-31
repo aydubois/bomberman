@@ -12,7 +12,7 @@ export class Map{
     constructor(){
         this.grounds = [];
         this.bonusItems = [
-            "life", "bomb"
+            "life", "bomb", "damage"
         ]
     }
 
@@ -92,7 +92,7 @@ export class Map{
      * @param {*} id id softwall
      */
     bonus(x,y, id){
-        if(id%2 == 0){
+        if(id%2 == 0 && this.grounds[y][x].bonus == false){
         let randomItem = randomNum(0, this.bonusItems.length-1);
         let bonus = document.createElement("div");
         bonus.className = "bonus";

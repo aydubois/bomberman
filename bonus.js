@@ -8,7 +8,7 @@ export class Attributes {
             actuelBomb: 0,
             maxBombs: 1,
             delayBomb: 3,
-            damageBomb: 1
+            damageBomb: 3
         }
         this.dead = false
 
@@ -28,7 +28,6 @@ export class Attributes {
 
     addLife(x, y) {
         if(map.grounds[y][x].bonus == true && map.grounds[y][x].bonusName == "life"){
-            console.log(this.attribut.life)
             this.attribut.life++;
             document.querySelector(`.bonus[x="${x}"][y="${y}"]`).remove();
             map.grounds[y][x].bonus = false;
@@ -43,13 +42,27 @@ export class Attributes {
 
     addBomb(x, y){
         if(map.grounds[y][x].bonus == true && map.grounds[y][x].bonusName == "bomb"){
-            console.log(this.attribut.maxBombs)
             this.attribut.maxBombs++;
             document.querySelector(`.bonus[x="${x}"][y="${y}"]`).remove();
             map.grounds[y][x].bonus = false;
             map.grounds[y][x].bonusName = null;
 
             document.getElementById("sentence").textContent = "YOU WON AN ADDITIONAL BOMB";
+            setTimeout(()=>{
+                document.getElementById("sentence").textContent = " ";
+            }, 2000);
+        
+        }
+    }
+
+    addDamageBomb(x,y){
+        if(map.grounds[y][x].bonus == true && map.grounds[y][x].bonusName == "damage"){
+            this.attribut.damageBomb++;
+            document.querySelector(`.bonus[x="${x}"][y="${y}"]`).remove();
+            map.grounds[y][x].bonus = false;
+            map.grounds[y][x].bonusName = null;
+
+            document.getElementById("sentence").textContent = "YOUR BOMBS DO MORE DAMAGE";
             setTimeout(()=>{
                 document.getElementById("sentence").textContent = " ";
             }, 2000);
