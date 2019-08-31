@@ -100,9 +100,6 @@ article{
     display: flex;
     flex-wrap: wrap;
     background-image: none;
-    
-
-    
 
     .case{
         flex : 0 0 auto;
@@ -111,4 +108,16 @@ article{
         height: 50px; // Changer aussi dans constants.js
 
     }
+}
+#end{
+
+    width: 700px;
+    height: 500px;
+    background-color: #E4CD8E;
+    border-radius: 40px;
+    border: #E9996D 2px solid;
+    text-align: center;
+    padding: 20%;
+    font-size: xx-large;
+    font-weight: bold;
 }

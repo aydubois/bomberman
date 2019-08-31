@@ -99,4 +99,16 @@ article #score {
   height: 50px;
 }
 
+#end {
+  width: 700px;
+  height: 500px;
+  background-color: #E4CD8E;
+  border-radius: 40px;
+  border: #E9996D 2px solid;
+  text-align: center;
+  padding: 20%;
+  font-size: xx-large;
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=game.css.map */
