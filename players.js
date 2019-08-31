@@ -5,7 +5,7 @@ import {
     map
 } from "./map.js";
 import {
-    Bonus
+    Attributes
 } from "./bonus.js";
 
 export class Player {
@@ -15,7 +15,7 @@ export class Player {
         this.y = 1;
         this.bombs = [];
         this.sizeArray = 0;
-        this.bonus = new Bonus;
+        this.attributes = new Attributes;
 
         this.startListening();
         this.listeningBomb();
@@ -214,6 +214,10 @@ export class Player {
             if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
 
                 map.grounds[y][x - k].softWall = false;
+                if(map.grounds[y][x - k].bonus == true){
+                    let bonusSelect = document.querySelector(`.bonus[x="${x-k}"][y="${y}"]`);
+                    bonusSelect.style.zIndex = 1;
+                }
                 break;
             }
         }
@@ -232,11 +236,15 @@ export class Player {
             }
             this.flame(x + k, y);
             if (x + k == this.x && y == this.y) {
-                //this.bonus.removeLife();
+                return;
             }
             if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
 
                 map.grounds[y][x + k].softWall = false;
+                if(map.grounds[y][x + k].bonus == true){
+                    let bonusSelect = document.querySelector(`.bonus[x="${x+k}"][y="${y}"]`);
+                    bonusSelect.style.zIndex = 1;
+                }
                 break;
             }
 
@@ -255,12 +263,15 @@ export class Player {
             }
             this.flame(x, y - k);
             if (x == this.x && y - k == this.y) {
-                //this.bonus.removeLife();
-
+                return;
             }
             if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
 
                 map.grounds[y - k][x].softWall = false;
+                if(map.grounds[y-k][x].bonus == true){
+                    let bonusSelect = document.querySelector(`.bonus[x="${x}"][y="${y-k}"]`);
+                    bonusSelect.style.zIndex = 1;
+                }
                 break;
             }
         }
@@ -279,12 +290,15 @@ export class Player {
 
             this.flame(x, y + k);
             if (x == this.x && y + k == this.y) {
-                //this.bonus.removeLife();
-
+                return;
             }
             if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
 
                 map.grounds[y + k][x].softWall = false;
+                if(map.grounds[y+k][x].bonus == true){
+                    let bonusSelect = document.querySelector(`.bonus[x="${x}"][y="${y+k}"]`);
+                    bonusSelect.style.zIndex = 1;
+                }
                 break;
             }
 
@@ -332,7 +346,7 @@ export class Player {
         }, 1000)
 
         if(xFlame == this.x && yFlame == this.y){
-            this.bonus.removeLife();}
+            this.attributes.removeLife();}
     }
 }
 

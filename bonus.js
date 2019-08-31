@@ -1,8 +1,8 @@
 
 
-export class Bonus {
+export class Attributes {
     constructor() {
-        this.listBonus = {
+        this.attribut = {
             life: 1,
             maxBombs: 1,
             delayBomb: 3,
@@ -13,14 +13,23 @@ export class Bonus {
     }
 
     removeLife() {
-        this.listBonus.life--;
-        if (this.listBonus.life <= 0) {
+        this.attribut.life--;
+        if (this.attribut.life <= 0) {
             this.dead = true;
             document.getElementById("player1").remove();
             document.getElementById("sentence").textContent = "YOU LOST, TRY AGAIN";
         }
 
     }
+
+    addLife() {
+
+    }
+
+    addBomb(){
+
+    }
+
 
 
 

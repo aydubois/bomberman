@@ -5,7 +5,6 @@ import {randomNum} from './util.js';
 import {Timer} from './timer.js';
 
 import {widthCase} from './constants.js';
-import {Player} from './players.js';
 
 export class Map{
 
@@ -32,6 +31,7 @@ export class Map{
                     y:y,
                     hardWall:false,
                     softWall:false,
+                    bonus:false,
                     bomb:false,
                     top:0,
                     left:0,
@@ -76,9 +76,32 @@ export class Map{
             let x = parseInt(wall.getAttribute("column"), 10);
 
             this.grounds[y][x].softWall = true;
+            
+            this.bonus(x, y, id)
         }
     }
-
+    /**
+     * If id softWall odd  => add bonus
+     * @param {*} x Position x softWall
+     * @param {*} y Position y softWall
+     */
+    bonus(x, y, id){
+        if(id%2 == 0){
+        let bonus = document.createElement("div");
+        bonus.className = "bonus";
+        bonus.style.position = "absolute";
+        bonus.setAttribute("x", x);
+        bonus.setAttribute("y", y);
+        bonus.style.left = x * widthCase + "px";
+        bonus.style.top = y * widthCase + "px";
+        bonus.style.width = widthCase + "px";
+        bonus.style.height = widthCase + "px";
+        bonus.style.backgroundImage = 'url("bonusHeart.jpeg")';
+        bonus.style.backgroundSize = "cover";
+        bonus.style.zIndex = -1;
+        document.getElementById("divPlayer").appendChild(bonus);
+        this.grounds[y][x].bonus = true;}
+    }
     hardWall(){
         const wallHard = document.querySelectorAll(`[row="0"],[row="${this.rows - 1}"],[column="0"],[column="${this.columns - 1}"]`);
 
@@ -93,6 +116,7 @@ export class Map{
             this.grounds[y][x].hardWall = true;
         }
     }
+
 
     start(){
         let startButton = document.getElementById("start");
@@ -115,6 +139,7 @@ export class Map{
         player.style.top = widthCase + "px"; 
         player.style.backgroundImage = 'url("player1.png")';
         player.style.backgroundSize = "cover";
+        player.style.zIndex = 2;
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(player);
     }
