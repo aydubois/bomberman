@@ -20,48 +20,66 @@ export class Player {
         this.startListening();
         this.listeningBomb();
 
+
     }
 
-
+    /**
+     * start listening to the player's movements
+     * left, right, down, up
+     */
     startListening() {
         document.addEventListener('keydown', (event) => {
             if (event.keyCode == 37) {
                 //left
+                    if(document.getElementById("player1")){
                 this.tryMove(-1, 0);
                 event.preventDefault();
-                event.stopPropagation();
+                event.stopPropagation();}
             }
         });
         document.addEventListener('keydown', (event) => {
             if (event.keyCode == 39) {
-                //right
+                    if(document.getElementById("player1")){
+                        //right
                 this.tryMove(1, 0);
                 event.preventDefault();
-                event.stopPropagation();
+                event.stopPropagation();}
             }
         });
         document.addEventListener('keydown', (event) => {
             if (event.keyCode == 40) {
                 //down
+                if(document.getElementById("player1")){
+
                 this.tryMove(0, -1);
                 event.preventDefault();
-                event.stopPropagation();
+                event.stopPropagation();}
             }
         })
         document.addEventListener('keydown', (event) => {
             if (event.keyCode == 38) {
                 //up
+                if(document.getElementById("player1")){
+
                 this.tryMove(0, 1);
                 event.preventDefault();
-                event.stopPropagation();
+                event.stopPropagation();}
             }
         })
     }
 
+
+    /**
+     * @param {*} x movements left/right
+     * @param {*} y movements up/down
+     */
     tryMove(x, y) {
         map.move(this, x, y);
     }
 
+    /**
+     * update position of player
+     */
     move(x, y) {
         this.x = x;
         this.y = y;
@@ -71,16 +89,24 @@ export class Player {
         player.style.top = (this.y * widthCase) + "px";
     }
 
+    /**
+     * start listening key for put bomb
+     */
     listeningBomb() {
-
         document.addEventListener('keydown', (event) => {
             if (event.keyCode == 32) {
+                if(document.getElementById("player1")){
+
                 this.canBomb();
                 event.preventDefault();
-                event.stopPropagation();
+                event.stopPropagation();}
             }
         });
     }
+
+    /**
+     * Puts bomb and updates map.grounds and starts trigger
+     */
     putBomb() {
 
         // search position of player
@@ -114,13 +140,16 @@ export class Player {
             id: id
         }
         map.grounds[y][x].bomb = b;
-        
+
         this.bombs.push(b);
         //trigger detonate
         this.triggerDetonate(b);
 
     }
 
+    /**
+     * checking if to put bomb is ok
+     */
     canBomb() {
 
         //check not an over bomb 
@@ -131,6 +160,10 @@ export class Player {
         }
     }
 
+    /**
+     * Starting trigger for bomb detonation
+     * @param {*} bomb Object => last bomb 
+     */
     triggerDetonate(bomb) {
         let timeBomb = 5 * 1000;
         let timeout = setTimeout(() => {
@@ -138,24 +171,36 @@ export class Player {
             this.detonate(bomb)
         }, timeBomb);
         bomb.timeout = timeout
-        
-
-
     }
 
+    /**
+     * Removes bomb and starts detonations 
+     * @param {*} bomb Object => last bomb
+     */
     detonate(bomb) {
-
         //search bomb to detonate and remove attributes
-        map.grounds[bomb.y][bomb.x].bomb = false;
+        map.grounds[bomb.y][bomb.x].bomb = null;
         bomb.bomb.remove()
+        let index = this.bombs.indexOf(bomb);
+        if (index != -1) {
+            this.bombs.splice(index, 1);
+        };
         let x = bomb.x;
         let y = bomb.y;
         this.detonateLeft(x, y)
         this.detonateRight(x, y)
         this.detonateBottom(x, y)
         this.detonateTop(x, y)
+
     }
 
+    /**
+     * first if : if cases to the left of bomb are nonexistent
+     * second : if player is on this case
+     * third : if there is softwall 
+     * @param {*} x Position x of bomb
+     * @param {*} y Position y of bomb
+     */
     detonateLeft(x, y) {
         for (let k = 1; k < 3; k++) { //around 3 cases
             if (!map.grounds[y][x - k] || !map.grounds[y] || map.grounds[y][x - k].hardWall == true) {
@@ -163,7 +208,7 @@ export class Player {
             }
             this.flame(x - k, y);
             if (x - k == this.x && y == this.y) {
-                this.bonus.removeLife();
+                console.log("t'es mourru")
             }
 
             if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
@@ -175,6 +220,11 @@ export class Player {
 
     }
 
+    /**
+     * idem in the right
+     * @param {*} x Position x of bomb
+     * @param {*} y Position y of bomb
+     */
     detonateRight(x, y) {
         for (let k = 1; k < 3; k++) {
             if (!map.grounds[y][x + k] || !map.grounds[y] || map.grounds[y][x + k].hardWall == true) {
@@ -182,7 +232,7 @@ export class Player {
             }
             this.flame(x + k, y);
             if (x + k == this.x && y == this.y) {
-                this.bonus.removeLife();
+                //this.bonus.removeLife();
             }
             if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
 
@@ -193,7 +243,11 @@ export class Player {
 
         }
     }
-
+    /**
+     * idem in the top
+     * @param {*} x Position x of bomb
+     * @param {*} y Position y of bomb
+     */
     detonateTop(x, y) {
         for (let k = 1; k < 3; k++) {
             if (!map.grounds[y - k] || !map.grounds[y - k][x] || map.grounds[y - k][x].hardWall == true) {
@@ -201,7 +255,7 @@ export class Player {
             }
             this.flame(x, y - k);
             if (x == this.x && y - k == this.y) {
-                this.bonus.removeLife();
+                //this.bonus.removeLife();
 
             }
             if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
@@ -212,6 +266,11 @@ export class Player {
         }
     }
 
+    /**
+     * idem in the bottom
+     * @param {*} x Position x of bomb
+     * @param {*} y Position y of bomb
+     */
     detonateBottom(x, y) {
         for (let k = 1; k < 3; k++) {
             if (!map.grounds[y + k] || !map.grounds[y + k][x] || map.grounds[y + k][x].hardWall == true) {
@@ -220,7 +279,7 @@ export class Player {
 
             this.flame(x, y + k);
             if (x == this.x && y + k == this.y) {
-                this.bonus.removeLife();
+                //this.bonus.removeLife();
 
             }
             if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
@@ -232,6 +291,13 @@ export class Player {
         }
     }
 
+    /**
+     * add element flame
+     * setup timer before removing
+     * change trigger of bomb if a flame touch it
+     * @param {*} xFlame Position x of flame
+     * @param {*} yFlame Position y of flame
+     */
     flame(xFlame, yFlame) {
 
         const flame = document.createElement("div");
@@ -247,17 +313,16 @@ export class Player {
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(flame);
 
-        
-        if(map.grounds[yFlame][xFlame].bomb) 
-        {
 
-            if(map.grounds[yFlame][xFlame].bomb.timeout) {
+        if (map.grounds[yFlame][xFlame].bomb) {
+
+            if (map.grounds[yFlame][xFlame].bomb.timeout) {
                 clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
                 map.grounds[yFlame][xFlame].bomb.timeout = null;
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.detonate(map.grounds[yFlame][xFlame].bomb)
                 }, 150)
-                
+
             }
         }
         setTimeout(() => {
@@ -266,6 +331,8 @@ export class Player {
             flame.remove();
         }, 1000)
 
+        if(xFlame == this.x && yFlame == this.y){
+            this.bonus.removeLife();}
     }
 }
 

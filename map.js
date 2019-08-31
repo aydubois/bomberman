@@ -52,13 +52,20 @@ export class Map{
         this.randomSoftWall(100);
         this.hardWall();
         this.start();
+        this.starter = null;
         
     }
-
+/**
+ * 
+ * @param {int} numberWall  nombre de mur  
+ */
     randomSoftWall(numberWall){
         let maxBlock = this.columns * this.rows;
         while(numberWall > 0){
             let id = randomNum(0, (maxBlock - 1));
+            while(id == 16 || id == 17 || id == 31){
+                id =randomNum(0, (maxBlock - 1));
+            }
             const wall = document.getElementById(id);
             wall.style.backgroundImage = 'url("wallSoft.jpg")';
             wall.style.backgroundSize = "cover";
@@ -90,13 +97,14 @@ export class Map{
     start(){
         let startButton = document.getElementById("start");
         startButton.addEventListener("click", ()=>{
+            if(this.starter == null || this.starter.finished == true){
             this.starter = new Timer();
-            this.initPlayer();
+            this.initPlayer();}
         })
     }
 
     initPlayer(){
-
+        if(!document.getElementById("player1")){
         const player = document.createElement('div');
         player.style.position = "absolute";
         player.className = 'player';
@@ -109,6 +117,7 @@ export class Map{
         player.style.backgroundSize = "cover";
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(player);
+    }
     }
 
     move(player, x, y){

@@ -22,7 +22,7 @@ export class Timer {
 
         let intervalTimer = setInterval(() => {
             let timeLeft = Math.round((remainTime - Date.now()) / 1000);
-            if (timeLeft <= 0) {
+            if (timeLeft <= 0 ||!document.getElementById("player1")) {
                 clearInterval(intervalTimer);
                 this.displayTimeLeft(this.wholeTime);
                 this.finished = true;
