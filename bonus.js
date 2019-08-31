@@ -1,3 +1,4 @@
+import { map } from "./map.js";
 
 
 export class Attributes {
@@ -22,8 +23,17 @@ export class Attributes {
 
     }
 
-    addLife() {
-
+    addLife(x, y) {
+        if(map.grounds[y][x].bonus == true){
+            this.attribut.life++;
+            document.querySelector(`.bonus[x="${x}"][y="${y}"]`).remove();
+            map.grounds[y][x].bonus == false;
+            document.getElementById("sentence").textContent = "YOU WON A LIFE";
+            setTimeout(()=>{
+                document.getElementById("sentence").textContent = " ";
+            }, 2000);
+        
+        }
     }
 
     addBomb(){

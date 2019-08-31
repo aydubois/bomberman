@@ -78,7 +78,7 @@ export class Player {
     }
 
     /**
-     * update position of player
+     * update position of player && attributes
      */
     move(x, y) {
         this.x = x;
@@ -87,6 +87,7 @@ export class Player {
         const player = document.getElementById("player1");
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
+        this.attributes.addLife(x,y)
     }
 
     /**
