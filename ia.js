@@ -1,75 +1,80 @@
 import {
-    widthCase
-} from './constants.js';
-import {
-    styleCase
-} from './util.js';
+    randomNum, randomMove
+} from "./util.js";
 import {
     map
 } from "./map.js";
+
 import {
-    Attributes
-} from "./bonus.js";
+    widthCase, styleCase
+} from './constants.js';
+import { AttributesIa } from "./bonusIa.js";
 
-export class Player {
 
-    constructor() {
-        this.x = 1;
-        this.y = 1;
+export class Ia {
+
+    constructor(number) {
+
+        this.number = number;
         this.bombs = [];
         this.sizeArray = 0;
-        this.attributes = new Attributes;
-
+        this.attributes = new AttributesIa;
+        this.ia = document.getElementById(`"player${this.number}"`) // ???? pq null ???
+        this.initPosition();
         this.startListening();
-        this.listeningBomb();
-
 
     }
     /**
      * start listening to the player's movements
      * left, right, down, up
      */
-    startListening() {
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 37) {
-                //left
-                    if(document.getElementById("player1")){
-                this.tryMove(-1, 0);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 39) {
-                    if(document.getElementById("player1")){
-                        //right
-                this.tryMove(1, 0);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 40) {
-                //down
-                if(document.getElementById("player1")){
-
-                this.tryMove(0, -1);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        })
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 38) {
-                //up
-                if(document.getElementById("player1")){
-
-                this.tryMove(0, 1);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        })
+    initPosition(){
+        if(this.number == 1){
+            this.x = 1;
+            this.y = 1;
+        }
+        if(this.number == 2){
+            this.x = 13;
+            this.y = 1;
+        }
+        if(this.number == 3){
+            this.x = 1;
+            this.y = 13;
+        }
+        if(this.number == 4){
+            this.x = 13;
+            this.y = 13;
+        }
     }
+    startListening() {
+        console.log(this.ia)
 
+        document.addEventListener('keydown', (event) => {
+            if (event.keyCode == 37 ||
+                event.keyCode == 38 ||
+                event.keyCode == 39 ||
+                event.keyCode == 40 ||
+                event.keyCode == 32) {
+                    if(document.getElementById("player2")){
+                    let random = randomNum(-1, 2)
+                    
+                    
+                    if (random == 2) {  
+                        
+                        this.canBomb()
+                        let random2 = randomMove()
+                        this.tryMove(random2[0], random2[1]);
+                    } else {
+                        
+                        let random2 = randomMove()
+                        this.tryMove(random2[0], random2[1])
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+            }}
+        });
+    }
 
     /**
      * @param {*} x movements left/right
@@ -86,29 +91,18 @@ export class Player {
         this.x = x;
         this.y = y;
 
-        const player = document.getElementById("player1");
+        const player = document.getElementById("player2");
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
+        if(map.grounds[y][x].flame == true){
+            this.tryMove(randomNum(-1, 1),randomNum(-1, 1))
+        }
         this.attributes.addLife(x,y);
         this.attributes.addBomb(x,y);
         this.attributes.addDamageBomb(x,y);
         this.attributes.removeLife(x,y)
     }
 
-    /**
-     * start listening key for put bomb
-     */
-    listeningBomb() {
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 32) {
-                if(document.getElementById("player1")){
-
-                this.canBomb();
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-    }
 
     /**
      * Puts bomb and updates map.grounds and starts trigger
@@ -161,12 +155,16 @@ export class Player {
 
         //check not an over bomb 
         if (map.grounds[this.y][this.x].bomb) {
+            console.log('probleme')
             return;
         }
         else if (this.attributes.attribut.actuelBomb == this.attributes.attribut.maxBombs){
+            console.log('probleme2')
             return;
+        
         }
         else {
+            console.log('marche')
             this.putBomb();
         }
 
@@ -363,6 +361,5 @@ export class Player {
         if(xFlame == this.x && yFlame == this.y){
             this.attributes.removeLife(this.x, this.y);}
     }
-}
 
-/// ajouter bonus à chaque perso
+}

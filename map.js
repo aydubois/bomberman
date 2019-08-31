@@ -5,7 +5,7 @@ import {randomNum} from './util.js';
 import {Timer} from './timer.js';
 
 import {widthCase} from './constants.js';
-import {styleCase} from './constants.js';
+import {styleCase} from './util.js';
 
 export class Map{
 
@@ -69,7 +69,10 @@ export class Map{
         let maxBlock = this.columns * this.rows;
         while(numberWall > 0){
             let id = randomNum(0, (maxBlock - 1));
-            while(id == 16 || id == 17 || id == 31){
+            while(id == 16 || id == 17 || id == 31
+                || id == 27 || id == 28 || id == 43
+                || id == 181 || id == 196 || id == 197
+                || id == 193 || id == 207 || id == 208){
                 id =randomNum(0, (maxBlock - 1));
             }
             const wall = document.getElementById(id);
@@ -141,6 +144,7 @@ export class Map{
     }
 
     initPlayer(){
+        //player
         if(!document.getElementById("player1")){
         const player = document.createElement('div');
         player.className = 'player';
@@ -150,6 +154,39 @@ export class Map{
         player.style.zIndex = 2;
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(player);
+
+        //ia
+        const ia1 = document.createElement('div');
+        ia1.className = 'ia';
+        ia1.setAttribute("id", "player2");
+        styleCase(ia1);
+        ia1.style.backgroundImage = 'url("player2.png")';
+        ia1.style.zIndex = 2;
+        ia1.style.left = widthCase*13 + "px"; 
+        ia1.style.top = widthCase + "px";         
+        divPlayer.appendChild(ia1);
+
+        const ia2 = document.createElement('div');
+        ia2.className = 'ia';
+        ia2.setAttribute("id", "player3");
+        styleCase(ia2);
+        ia2.style.left = widthCase + "px"; 
+        ia2.style.top = widthCase*13 + "px"; 
+        ia2.style.backgroundImage = 'url("player3.png")';
+        ia2.style.zIndex = 2;
+        
+        divPlayer.appendChild(ia2);
+
+        const ia3 = document.createElement('div');
+        ia3.className = 'ia';
+        ia3.setAttribute("id", "player4");
+        styleCase(ia3);
+        ia3.style.left = widthCase*13 + "px"; 
+        ia3.style.top = widthCase*13 + "px"; 
+        ia3.style.backgroundImage = 'url("player4.png")';
+        ia3.style.zIndex = 2;
+        
+        divPlayer.appendChild(ia3);
     }
     }
 
@@ -157,8 +194,8 @@ export class Map{
 
         let xFinal = player.x + x;
         let yFinal = player.y - y;
-
-        if(this.grounds[yFinal][xFinal].hardWall == false && this.grounds[yFinal][xFinal].softWall == false){
+        if(!this.grounds[yFinal][xFinal]){return}
+        else if(this.grounds[yFinal][xFinal].hardWall == false && this.grounds[yFinal][xFinal].softWall == false){
             player.move(xFinal, yFinal);
         }
     }

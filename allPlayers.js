@@ -1,73 +1,44 @@
 import {
-    widthCase
+    widthCase, styleCase
 } from './constants.js';
-import {
-    styleCase
-} from './util.js';
 import {
     map
 } from "./map.js";
-import {
-    Attributes
-} from "./bonus.js";
+import { Attributes } from "./bonus.js";
 
-export class Player {
+export class AllPlayers{
 
-    constructor() {
-        this.x = 1;
-        this.y = 1;
+    constructor(number) {
         this.bombs = [];
         this.sizeArray = 0;
         this.attributes = new Attributes;
+        this.number = number;
+        this.initPosition()
+    }
 
-        this.startListening();
-        this.listeningBomb();
-
-
+    initPosition(){
+        if(this.number == 1){
+            this.x = 1;
+            this.y = 1;
+        }
+        if(this.number == 2){
+            this.x = 13;
+            this.y = 1;
+        }
+        if(this.number == 3){
+            this.x = 1;
+            this.y = 13;
+        }
+        if(this.number == 4){
+            this.x = 13;
+            this.y = 13;
+        }
     }
     /**
      * start listening to the player's movements
      * left, right, down, up
      */
     startListening() {
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 37) {
-                //left
-                    if(document.getElementById("player1")){
-                this.tryMove(-1, 0);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 39) {
-                    if(document.getElementById("player1")){
-                        //right
-                this.tryMove(1, 0);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 40) {
-                //down
-                if(document.getElementById("player1")){
-
-                this.tryMove(0, -1);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        })
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 38) {
-                //up
-                if(document.getElementById("player1")){
-
-                this.tryMove(0, 1);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        })
     }
 
 
@@ -85,8 +56,9 @@ export class Player {
     move(x, y) {
         this.x = x;
         this.y = y;
-
-        const player = document.getElementById("player1");
+        //let players = document.getElementsByClassName("ia");
+        //console.log(players)
+        let player = document.getElementById(`"player${this.number}"`);
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
         this.attributes.addLife(x,y);
@@ -95,20 +67,6 @@ export class Player {
         this.attributes.removeLife(x,y)
     }
 
-    /**
-     * start listening key for put bomb
-     */
-    listeningBomb() {
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 32) {
-                if(document.getElementById("player1")){
-
-                this.canBomb();
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-    }
 
     /**
      * Puts bomb and updates map.grounds and starts trigger
@@ -364,5 +322,3 @@ export class Player {
             this.attributes.removeLife(this.x, this.y);}
     }
 }
-
-/// ajouter bonus à chaque perso
