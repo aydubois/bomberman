@@ -19,7 +19,8 @@ export class Player {
         this.bombs = [];
         this.sizeArray = 0;
         this.attributes = new Attributes;
-
+        this.position = [this.x, this.y]
+        map.allPositions[0] = this.position;
         this.startListening();
         this.listeningBomb();
 
@@ -89,6 +90,7 @@ export class Player {
         const player = document.getElementById("player1");
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
+        map.allPositions[0] = [this.x, this.y]
         this.attributes.addLife(x,y);
         this.attributes.addBomb(x,y);
         this.attributes.addDamageBomb(x,y);

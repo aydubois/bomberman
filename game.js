@@ -1,6 +1,6 @@
 import {map} from "./map.js";
 import { Player } from "./players.js";
-import {Ia} from "./ia.js";
+import {Ia} from "./ia2.js";
 
 map.initSet(15,15);
 

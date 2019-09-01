@@ -1,5 +1,4 @@
 import { map } from "./map.js";
-import { widthCase } from "./constants.js";
 
 
 export class Attributes {

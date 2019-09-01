@@ -21,24 +21,21 @@ export function styleCase(block){
 
 export function randomMove(){                    
     let random = randomNum(-1, 1)
-    
-    let random2;
     if(random == 0){  // si le nb = 0 , le deuxième doit être différent
         let random2 = randomNum(-1,1);
         if(random2 == 0){
-            let a = [1, -1];
-            random2 = randomNum(a[0],a[1]);
-            console.log(random, random2)
+            let aA = [1, -1];
+            random2= aA[Math.floor(Math.random()*aA.length)];
+            
+            console.log("essai nb aleatoir" + random, random2)
             return [random, random2];
 
         }else{
-            console.log(random, random2)
             return [random, random2];}
 
     }
     else{
         let random2 = 0
-        console.log(random, random2)
         return [random, random2];
         
     }

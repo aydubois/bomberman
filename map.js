@@ -11,6 +11,7 @@ export class Map{
 
     constructor(){
         this.grounds = [];
+        this.allPositions = [];
         this.bonusItems = [
             "life", "bomb", "damage"
         ]
@@ -38,6 +39,7 @@ export class Map{
                     bonus:false,
                     bonusName:null,
                     flame:false,
+                    futureflame:false,
                     bomb:false,
                     top:0,
                     left:0,
@@ -199,6 +201,19 @@ export class Map{
             player.move(xFinal, yFinal);
         }
     }
+    moveIa(player, x, y){
+
+        let xFinal = player.x + x;
+        let yFinal = player.y - y;
+        if(this.grounds[yFinal][xFinal].hardWall == true){
+            console.log("retry")
+            player.tryMove()
+        }
+        else if(this.grounds[yFinal][xFinal].hardWall == false && this.grounds[yFinal][xFinal].softWall == false){
+            player.move(xFinal, yFinal);
+        }
+    }
+
 }
 
 export const map = new Map(); 
