@@ -14,28 +14,26 @@ export class AttributesIa {
 
     }
 
-    removeLife(x,y) {
+    removeLife(x,y, number) {
         if(map.grounds[y][x].flame == true){
         this.attribut.life--;
-        document.getElementById("sentence").textContent = "Le joueur 2 a perdu une vie";
+        document.getElementById("sentence").textContent = "Le joueur " + number + " a perdu une vie";
 
         if (this.attribut.life <= 0) {
             this.dead = true;
-            document.getElementById("player2").remove();
-            document.getElementById("sentence").textContent = "le joueur 2 est mort";
+            document.getElementById(`player${number}`).remove();
+            document.getElementById("sentence").textContent = "le joueur " + number + " est mort";
             
 
             document.getElementById("start").textContent = "Remise à zéro";
             let end = document.createElement("div");
             end.setAttribute("id", "end");
-            end.textContent = " You WIN"
+            end.textContent = "You WIN"
             document.getElementById("main_wrapper").replaceChild(end, game);
             document.getElementById("main_wrapper").removeChild(divPlayer);
-
-
-
         }
     }
+        console.log(this.attribut.life)
     }
 
     addLife(x, y) {
@@ -45,6 +43,7 @@ export class AttributesIa {
             map.grounds[y][x].bonus = false;
             map.grounds[y][x].bonusName = null;
             document.getElementById("sentence").textContent = "Le joueur 2 a gagné une vie";
+    
             setTimeout(()=>{
                 document.getElementById("sentence").textContent = " ";
             }, 2000);

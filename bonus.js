@@ -28,9 +28,6 @@ export class Attributes {
             end.textContent = " END OF THE GAME"
             document.getElementById("main_wrapper").replaceChild(end, game);
             document.getElementById("main_wrapper").removeChild(divPlayer);
-
-
-
         }
     }
     }

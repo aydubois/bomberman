@@ -109,10 +109,10 @@ export class Ia {
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
 
-        this.attributes.addLife(x,y);
-        this.attributes.addBomb(x,y);
-        this.attributes.addDamageBomb(x,y);
-        this.attributes.removeLife(x,y)
+        this.attributes.addLife(this.x,this.y);
+        this.attributes.addBomb(this.x,this.y);
+        this.attributes.addDamageBomb(this.x,this.y);
+        this.attributes.removeLife(this.x,this.y)
 
     }
 

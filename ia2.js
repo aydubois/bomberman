@@ -58,9 +58,10 @@ export class Ia {
 
     startIa() {
         setInterval(()=>{
-            if(document.getElementById("player2")){
+            if(document.getElementById(`player${this.number}`)){   /// 
                 this.searchDirectionTarget();
-        }}, 500);
+                
+        }}, 1000);
     }
     startBomb(){
         setInterval(()=>{
@@ -80,6 +81,8 @@ export class Ia {
         let yDirection;
         let xDistance;
         let yDistance;
+        console.log('mvmt suivant avant : ' + this.nextMouvement)
+
 
         if(map.grounds[yposition][yposition].futureflame == false){
 
@@ -104,30 +107,33 @@ export class Ia {
         } else {
             this.nextMouvement = yDirection; 
         }
-
+        
         this.setNextmove();}
 
         else{
-            if(map.grounds[yposition+1][yposition].futureflame == false){
+            if(map.grounds[yposition+1][yposition].futureflame == false && map.grounds[yposition+1][yposition].softWall == false && map.grounds[yposition+1][yposition].hardWall == false){
                 yDirection = "S"
             this.nextMouvement = yDirection
 
-            } else if (map.grounds[yposition -1][yposition].futureflame == false){
+            } else if (map.grounds[yposition -1][yposition].futureflame == false && map.grounds[yposition-1][yposition].softWall == false && map.grounds[yposition-1][yposition].hardWall == false){
                 yDirection = "N"
             this.nextMouvement = yDirection
 
-            } else if (map.grounds[yposition][yposition+1].futureflame == false){
+            } else if (map.grounds[yposition][yposition+1].futureflame == false && map.grounds[yposition][yposition+1].softWall == false && map.grounds[yposition][yposition+1].hardWall == false){
                 xDirection = "E"
             this.nextMouvement = xDirection
 
-            } else { 
+            } else if(map.grounds[yposition][yposition-1].futureflame == false && map.grounds[yposition][yposition-1].softWall == false && map.grounds[yposition][yposition-1].hardWall == false){ 
                 xDirection = "W" 
                 this.nextMouvement = xDirection
+            } else{
+                this.nextMouvement = this.nextMouvement;
             }
             
             this.setNextmove();
             
         }
+        console.log('mvmt suivant : ' + this.nextMouvement)
     }
 
     setNextmove() {
@@ -179,7 +185,7 @@ export class Ia {
                 this.futureFlame(x + k, y);
                 this.futureFlame(x, y +k);
                 this.futureFlame(x, y-k);
-                this.escapeBomb()
+                
                 
             }
         }
@@ -201,7 +207,6 @@ export class Ia {
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
 
-
         this.positionActuel[0] = this.x;
         this.positionActuel[1] = this.y;
         map.allPositions[1] = this.position;
@@ -216,12 +221,15 @@ export class Ia {
                 if(this.nextMouvement == "N" || this.nextMouvement == "S"){
                 let aA = ["W", "E"];
                 let random = aA[Math.floor(Math.random()*aA.length)];
+                
                 this.nextMouvement = random;
                 this.setNextmove();
             }}
             else{
                 let aA = ["S", "N"];
                 let random = aA[Math.floor(Math.random()*aA.length)];
+                
+
                 this.nextMouvement = random;
                 this.setNextmove()
             }
@@ -264,6 +272,7 @@ export class Ia {
         this.bombs.push(b);
         //trigger detonate
         this.triggerDetonate(b);
+        this.avoidFlame(x, y);
 
     }
 
@@ -421,7 +430,7 @@ export class Ia {
      * @param {*} yFlame Position y of flame
      */
     flame(xFlame, yFlame) {
-
+        
         const flame = document.createElement("div");
         flame.style.backgroundImage = 'url("flame.gif")';
         flame.style.opacity = 0.70;
@@ -433,28 +442,41 @@ export class Ia {
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(flame);
         map.grounds[yFlame][xFlame].flame = true;
-
-
+        
+        
+        
         if (map.grounds[yFlame][xFlame].bomb) {
-
+            
             if (map.grounds[yFlame][xFlame].bomb.timeout) {
                 clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
                 map.grounds[yFlame][xFlame].bomb.timeout = null;
                 setTimeout(() => {
                     this.detonate(map.grounds[yFlame][xFlame].bomb)
                 }, 150)
-
+                
             }
         }
+        setInterval(()=>{
+            if(xFlame == this.x && yFlame == this.y){
+                console.log("mourru");
+                this.attributes.removeLife(this.x, this.y, this.number);}
+            
+        },100)
         setTimeout(() => {
             map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
             map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
             map.grounds[yFlame][xFlame].flame = false;
-            flame.remove();
-        }, 1000)
+            map.grounds[yFlame][xFlame].futureflame = false;
 
-        if(xFlame == this.x && yFlame == this.y){
-            this.attributes.removeLife(this.x, this.y);}
+            flame.remove();
+            clearInterval(()=>{
+                if(xFlame == this.x && yFlame == this.y){
+                    this.attributes.removeLife(this.x, this.y, this.number);}
+                
+            });
+            
+        }, 1000)
     }
+
 
 }

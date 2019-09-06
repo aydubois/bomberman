@@ -23,8 +23,6 @@ export class Player {
         map.allPositions[0] = this.position;
         this.startListening();
         this.listeningBomb();
-
-
     }
     /**
      * start listening to the player's movements
