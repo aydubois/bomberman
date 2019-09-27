@@ -1,0 +1,21 @@
+nav{
+    
+    ul{
+        display: flex;
+        flex-direction: row-reverse;
+
+        li{
+            list-style: none;
+            font-weight: 600;
+            margin-left: 8%;
+            margin-right: 1%;
+        }
+    }
+    a{
+        text-decoration: none;
+        color: black;
+    }
+    a:hover{
+        background-color: #E4CD8E;
+    }
+}

@@ -4,11 +4,13 @@
     <meta charset="utf-8">
     <title>Bomberman v.1</title>
     <link rel="stylesheet" type="text/css" href="/css/game.css">
+    <link rel="stylesheet" type="text/css" href="/css/nav.css">
 
 </head>
 
 <body>
     <header>
+        <img src="./pictures/logo.png" alt="logo">
         <h1>BOMBERMAN</h1>
         <?php include('./php/nav.php')?>
     </header>

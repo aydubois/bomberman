@@ -1,0 +1,97 @@
+*{
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+}
+body{
+    background-color: #E4CD8E;
+    width: 100%;
+}
+header{
+    background-color: beige;
+    padding: 0.7em 0 0.7em 0;
+    border-radius: 20px;
+    padding-left: 20%;
+    padding-right: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    img{
+        width:5%;
+        height: 5%;
+    }
+    h1{
+        font-size: 3em;
+        font-family: 'Times New Roman', Times, serif;
+        text-align: left;
+    }
+}
+
+section{
+    width: 40%;
+    margin: auto;
+    margin-top: 3em;
+    font-size: large;
+
+    p{
+        text-align: center;
+        font-size: xx-large;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+
+    form{
+        width: 70%;
+        padding: 2%;
+        margin: auto;
+        border: 2px solid maroon;
+        border-radius: 20px;
+        background-color: chocolate;
+        display: flex;
+        flex-direction: column;
+        font-size: large;
+
+        .info{
+            display: flex;
+            justify-content: flex-start;
+            margin: 2%;
+
+            input{
+                margin-left: 3%;
+                padding-left: 2%;
+                padding-right: 2%;
+                border-radius: 20px;
+                font-size: large;
+                
+            }
+        }
+        input[type="submit"]{
+            width: 50%;
+            margin : auto;
+            margin-top: 1%;
+            margin-bottom: 1%;
+            border-radius: 20px;
+            font-size: large;
+            font-weight: bold;
+        }
+    }
+}
+.register_ok{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    p{
+        margin:3% 0;
+    }
+    button{
+        background-color: chocolate;
+        border-radius: 20px;
+        border: none;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: x-large;
+        font-weight: 800;
+    }
+}

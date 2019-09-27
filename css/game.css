@@ -10,11 +10,21 @@ header {
   background-color: beige;
   padding: 0.7em 0 0.7em 0;
   border-radius: 20px;
+  padding-left: 20%;
+  padding-right: 20%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+header img {
+  width: 5%;
+  height: 5%;
 }
 header h1 {
   font-size: 3em;
   font-family: "Times New Roman", Times, serif;
-  text-align: center;
+  text-align: left;
 }
 
 section {
