@@ -1,127 +1,240 @@
-import {
-    randomNum, randomMove
-} from "./util.js";
+
 import {
     map
 } from "./map.js";
 
 import {
-    widthCase, styleCase
+    widthCase,
+    styleCase
 } from './constants.js';
-import { AttributesIa } from "./bonusIa.js";
+import {
+    AttributesIa
+} from "./bonusIa.js";
 
 
 export class Ia {
 
     constructor(number) {
-
+        this.possible = "yes"
         this.number = number;
         this.bombs = [];
         this.sizeArray = 0;
-        this.attributes = new AttributesIa;
-        this.ia = document.getElementById(`"player${this.number}"`) // ???? pq null ???
+        this.xNext = 0;
+        this.yNext = 0;
         this.initPosition();
-        this.startListening();
+        this.attributes = new AttributesIa;
+        this.positionActuel = [this.x, this.y];
+        this.historyPositions = [this.position];
+        map.allPositions[1] = this.positionActuel;
+        this.nextMouvement = null;
+        this.startIa();
+        this.startBomb();
+        this.unblock();
 
     }
-    /**
-     * start listening to the player's movements
-     * left, right, down, up
-     */
-    initPosition(){
-        if(this.number == 1){
+
+    initPosition() {
+        if (this.number == 1) {
             this.x = 1;
             this.y = 1;
         }
-        if(this.number == 2){
+        if (this.number == 2) {
             this.x = 13;
             this.y = 1;
         }
-        if(this.number == 3){
+        if (this.number == 3) {
             this.x = 1;
             this.y = 13;
         }
-        if(this.number == 4){
+        if (this.number == 4) {
             this.x = 13;
             this.y = 13;
         }
     }
-    startListening() {
-        setInterval(()=>{
-            if(document.getElementById("player2")){
-                let random = randomNum(-2, 2)
-                
-                if (random == 2) {  
-                    this.canBomb()
-                    this.tryMove()
-                    this.escapeBomb()
+    
 
-                } else if(random != -2){
-                    this.tryMove()
-                    this.escapeBomb()
-                }
-        }}, 1000)
+    startIa() {
         setInterval(()=>{
-            if(document.getElementById("player2")){ 
-              
-                    this.escapeBomb()}
+            if(document.getElementById(`player${this.number}`)){   /// 
+                this.searchDirectionTarget();
                 
-        }, 50)
-        /*document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 37 ||
-                event.keyCode == 38 ||
-                event.keyCode == 39 ||
-                event.keyCode == 40 ||
-                event.keyCode == 32) {
-                    if(document.getElementById("player2")){
-                    let random = randomNum(-2, 2)
-                    
-                    if (random == 2) {  
-                        this.canBomb()
-                        this.tryMove();
+        }}, 1000);
+    }
+    startBomb(){
+        setInterval(()=>{
+        if(document.getElementById("player2")){
+            this.putBomb();
+    }}, 4000);
+    }
 
-                    } else if(random != -2){
-                        this.tryMove()
-                    }
-                    event.preventDefault();
-                    event.stopPropagation();
-                    
+    searchDirectionTarget() {
+        let xposition = this.positionActuel[0];
+        let yposition = this.positionActuel[1];
+        let player = map.allPositions[0]; // position du player 1 
+        let xplayer = player[0];
+        let yplayer = player[1];
+
+        let xDirection;
+        let yDirection;
+        let xDistance;
+        let yDistance;
+        console.log('mvmt suivant avant : ' + this.nextMouvement)
+
+
+        if(map.grounds[yposition][xposition].futureflame == false){
+
+        if (xposition > xplayer) {
+            xDistance = xposition - xplayer;
+            xDirection = "W";
+        } else {
+            xDistance = xplayer - xposition;
+            xDirection = "E";
+        }
+    
+        if (yposition > yplayer) {
+            yDistance = yposition - yplayer;
+            yDirection = "N";
+        } else {
+            yDistance = yplayer - yposition;
+            yDirection = "S";
+        }
+    
+        if (xDistance > yDistance) {
+            this.nextMouvement = xDirection; 
+        } else {
+            this.nextMouvement = yDirection; 
+        }
+        
+        this.setNextmove();}
+
+        else{
+            if(map.grounds[yposition+1][xposition].futureflame == false && map.grounds[yposition+1][xposition].softWall == false && map.grounds[yposition+1][xposition].hardWall == false){
+                yDirection = "S"
+            this.nextMouvement = yDirection
+
+            } else if (map.grounds[yposition -1][xposition].futureflame == false && map.grounds[yposition-1][xposition].softWall == false && map.grounds[yposition-1][xposition].hardWall == false){
+                yDirection = "N"
+            this.nextMouvement = yDirection
+
+            } else if (map.grounds[yposition][xposition+1].futureflame == false && map.grounds[yposition][xposition+1].softWall == false && map.grounds[yposition][xposition+1].hardWall == false){
+                xDirection = "E"
+            this.nextMouvement = xDirection
+
+            } else if(map.grounds[yposition][xposition-1].futureflame == false && map.grounds[yposition][xposition-1].softWall == false && map.grounds[yposition][xposition-1].hardWall == false){ 
+                xDirection = "W" 
+                this.nextMouvement = xDirection
+            } else{
+                this.nextMouvement = this.nextMouvement;
+            }
+            
+            this.setNextmove();
+            
+        }
+        console.log('mvmt suivant : ' + this.nextMouvement)
+    }
+
+    setNextmove() {
+        switch (this.nextMouvement) {
+            case "W":
+                this.xNext = -1;
+                this.yNext = 0;
+                break;
+
+            case "E":
+                this.xNext = 1;
+                this.yNext = 0;
+                break;
+
+            case "N":
+                this.xNext = 0;
+                this.yNext = -1;
+                break;
+
+            case "S":
+                this.xNext = 0;
+                this.yNext = 1;
+                break;
+        }
+        this.avoidWalls();
+    }
+
+    
+    avoidWalls() {
+        if(map.grounds[this.y + this.yNext][this.x + this.xNext].softWall == true || map.grounds[this.y + this.yNext][this.x + this.xNext].hardWall == true ){
+            //si il y a un mur mou poser une bombe et sortir du champs de la bombe
+            this.possible = "no";
+                let aA = ["W", "E", "S", "N"];
+                let random = aA[Math.floor(Math.random()*aA.length)];
+                this.nextMouvement = random;
+                this.setNextmove();
+        }else{
+        this.possible = "yes"
+        this.move();}
+    }
+
+
+
+
+    avoidFlame(x,y){
+
+            for (let k = 1; k < this.attributes.attribut.damageBomb; k++) { //around 3 cases
+                this.futureFlame(x - k, y);
+                this.futureFlame(x + k, y);
+                this.futureFlame(x, y +k);
+                this.futureFlame(x, y-k);
+                
+                
             }
         }
-        });*/
+    futureFlame(xFuture, yFuture){
+            if(map.grounds[yFuture] && map.grounds[yFuture][xFuture]){
+            map.grounds[yFuture][xFuture].futureflame = true;
+        }
+     
     }
 
 
-    tryMove() {
-        let random = randomMove()
-        console.log(random)
-        map.moveIa(this, random[0], random[1]);
-    }
 
-    /**
-     * update position of player && attributes
-     */
-    move(x, y) {
-        this.x = x;
-        this.y = y;
+
+    move() {
+        this.x += this.xNext;
+        this.y += this.yNext;
 
         const player = document.getElementById("player2");
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
 
-        this.attributes.addLife(this.x,this.y);
-        this.attributes.addBomb(this.x,this.y);
-        this.attributes.addDamageBomb(this.x,this.y);
-        this.attributes.removeLife(this.x,this.y)
+        this.positionActuel[0] = this.x;
+        this.positionActuel[1] = this.y;
+        map.allPositions[1] = this.position;
+        this.historyPositions.push(this.positionActuel);
+        
+    }
+    
+    unblock(){
+        setInterval(()=>{
+            let sizePosition = this.historyPositions.length;
+            if(this.historyPositions[sizePosition-1] == this.historyPositions[sizePosition-3] ){
+                if(this.nextMouvement == "N" || this.nextMouvement == "S"){
+                let aA = ["W", "E"];
+                let random = aA[Math.floor(Math.random()*aA.length)];
+                
+                this.nextMouvement = random;
+                this.setNextmove();
+            }}
+            else{
+                let aA = ["S", "N"];
+                let random = aA[Math.floor(Math.random()*aA.length)];
+                
+
+                this.nextMouvement = random;
+                this.setNextmove()
+            }
+        }, 3000)
 
     }
 
-
-    /**
-     * Puts bomb and updates map.grounds and starts trigger
-     */
-    putBomb() {
-
+    putBomb(){
         // search position of player
         let left = this.x * widthCase;
         let top = this.y * widthCase;
@@ -129,14 +242,12 @@ export class Ia {
         //create bomb
         let id = "bomb" + this.bombs.length;
         const bomb = document.createElement('div');
-        bomb.style.position = "absolute";
         bomb.className = 'bomb';
         bomb.setAttribute("id", id);
-        bomb.style.width = widthCase + "px"; // A changer si changment dans scss
-        bomb.style.height = widthCase + "px";
+        styleCase(bomb);
         bomb.style.left = left + "px";
         bomb.style.top = top + "px";
-        bomb.style.backgroundImage = 'url("bomb.png")';
+        bomb.style.backgroundImage = 'url("../pictures/bomb.png")';
         bomb.style.backgroundSize = "cover";
 
         const caseBomb = document.querySelector(`[row="${top/widthCase}"][column="${left/widthCase}"]`);
@@ -158,54 +269,11 @@ export class Ia {
         this.bombs.push(b);
         //trigger detonate
         this.triggerDetonate(b);
-        
-        this.escapeDetonate(x, y)
-    
+        this.avoidFlame(x, y);
+
     }
 
-    escapeBomb(){
-            if(map.grounds[this.y][this.x].futureFlame == true){
-                this.tryMove()
-            }
-        
-    }
-    /**
-     * checking if to put bomb is ok
-     */
-    canBomb() {
-
-        //check not an over bomb 
-        if (map.grounds[this.y][this.x].bomb) {
-            return;
-        }
-        else if (this.attributes.attribut.actuelBomb == this.attributes.attribut.maxBombs){
-            return;
-        
-        }
-        else {
-            this.putBomb();
-        }
-
-        //check max bomb
-        
-    }
-
-    escapeDetonate(x, y){
-        for (let k = 1; k < this.attributes.attribut.damageBomb; k++) { //around 3 cases
-            this.futureFlame(x - k, y);
-            this.futureFlame(x + k, y);
-            this.futureFlame(x, y +k);
-            this.futureFlame(x, y-k);
-            this.escapeBomb()
-            
-        }
-    }
-    futureFlame(xFuture, yFuture){
-        if(map.grounds[yFuture] && map.grounds[yFuture][xFuture]){
-        map.grounds[yFuture][xFuture].futureflame = true;
-    }}
-
-    /**
+        /**
      * Starting trigger for bomb detonation
      * @param {*} bomb Object => last bomb 
      */
@@ -359,9 +427,9 @@ export class Ia {
      * @param {*} yFlame Position y of flame
      */
     flame(xFlame, yFlame) {
-
+        
         const flame = document.createElement("div");
-        flame.style.backgroundImage = 'url("flame.gif")';
+        flame.style.backgroundImage = 'url("../pictures/flame.gif")';
         flame.style.opacity = 0.70;
         flame.style.backgroundColor = "#E4CD8E";
         styleCase(flame);
@@ -371,28 +439,41 @@ export class Ia {
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(flame);
         map.grounds[yFlame][xFlame].flame = true;
-
-
+        
+        
+        
         if (map.grounds[yFlame][xFlame].bomb) {
-
+            
             if (map.grounds[yFlame][xFlame].bomb.timeout) {
                 clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
                 map.grounds[yFlame][xFlame].bomb.timeout = null;
                 setTimeout(() => {
                     this.detonate(map.grounds[yFlame][xFlame].bomb)
                 }, 150)
-
+                
             }
         }
+        setInterval(()=>{
+            if(xFlame == this.x && yFlame == this.y){
+                console.log("mourru");
+                this.attributes.removeLife(this.x, this.y, this.number);}
+            
+        },100)
         setTimeout(() => {
             map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
             map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
             map.grounds[yFlame][xFlame].flame = false;
-            flame.remove();
-        }, 1000)
+            map.grounds[yFlame][xFlame].futureflame = false;
 
-        if(xFlame == this.x && yFlame == this.y){
-            this.attributes.removeLife(this.x, this.y);}
+            flame.remove();
+            clearInterval(()=>{
+                if(xFlame == this.x && yFlame == this.y){
+                    this.attributes.removeLife(this.x, this.y, this.number);}
+                
+            });
+            
+        }, 1000)
     }
+
 
 }

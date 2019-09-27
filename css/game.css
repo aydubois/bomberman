@@ -28,7 +28,7 @@ section {
   height: 60px;
   font-weight: bold;
   font-size: x-large;
-  background-image: url("button.jpeg");
+  background-image: url("../pictures/button.jpeg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

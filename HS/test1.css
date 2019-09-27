@@ -1,0 +1,32 @@
+.main_wrapper{
+    display: flex;
+    justify-content: space-between;
+    width : 100%;
+}
+
+.main_wrapper *{
+    border: 2px solid red;
+    background-color: brown;
+    color: white;
+    width : 10%;
+    font-size: xx-large;
+    text-align: center; 
+}
+
+.main_wrapper *:hover{
+    background-color: chocolate;
+
+}
+
+p{
+    text-align: center;
+    font-size: xx-large;
+}
+
+.response{
+    display: flex;
+    font-size: xx-large;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

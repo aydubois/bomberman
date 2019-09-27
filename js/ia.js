@@ -1,81 +1,101 @@
 import {
-    widthCase
-} from './constants.js';
-import {
-    styleCase
-} from './util.js';
+    randomNum, randomMove
+} from "./util.js";
 import {
     map
 } from "./map.js";
+
 import {
-    Attributes
-} from "./bonus.js";
+    widthCase, styleCase
+} from './constants.js';
+import { AttributesIa } from "./bonusIa.js";
 
-export class Player {
 
-    constructor() {
-        this.x = 1;
-        this.y = 1;
+export class Ia {
+
+    constructor(number) {
+
+        this.number = number;
         this.bombs = [];
         this.sizeArray = 0;
-        this.attributes = new Attributes;
-        this.position = [this.x, this.y]
-        map.allPositions[0] = this.position;
+        this.attributes = new AttributesIa;
+        this.ia = document.getElementById(`"player${this.number}"`) // ???? pq null ???
+        this.initPosition();
         this.startListening();
-        this.listeningBomb();
+
     }
     /**
      * start listening to the player's movements
      * left, right, down, up
      */
+    initPosition(){
+        if(this.number == 1){
+            this.x = 1;
+            this.y = 1;
+        }
+        if(this.number == 2){
+            this.x = 13;
+            this.y = 1;
+        }
+        if(this.number == 3){
+            this.x = 1;
+            this.y = 13;
+        }
+        if(this.number == 4){
+            this.x = 13;
+            this.y = 13;
+        }
+    }
     startListening() {
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 37) {
-                //left
-                    if(document.getElementById("player1")){
-                this.tryMove(-1, 0);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 39) {
-                    if(document.getElementById("player1")){
-                        //right
-                this.tryMove(1, 0);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 40) {
-                //down
-                if(document.getElementById("player1")){
+        setInterval(()=>{
+            if(document.getElementById("player2")){
+                let random = randomNum(-2, 2)
+                
+                if (random == 2) {  
+                    this.canBomb()
+                    this.tryMove()
+                    this.escapeBomb()
 
-                this.tryMove(0, -1);
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        })
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 38) {
-                //up
-                if(document.getElementById("player1")){
+                } else if(random != -2){
+                    this.tryMove()
+                    this.escapeBomb()
+                }
+        }}, 1000)
+        setInterval(()=>{
+            if(document.getElementById("player2")){ 
+              
+                    this.escapeBomb()}
+                
+        }, 50)
+        /*document.addEventListener('keydown', (event) => {
+            if (event.keyCode == 37 ||
+                event.keyCode == 38 ||
+                event.keyCode == 39 ||
+                event.keyCode == 40 ||
+                event.keyCode == 32) {
+                    if(document.getElementById("player2")){
+                    let random = randomNum(-2, 2)
+                    
+                    if (random == 2) {  
+                        this.canBomb()
+                        this.tryMove();
 
-                this.tryMove(0, 1);
-                event.preventDefault();
-                event.stopPropagation();}
+                    } else if(random != -2){
+                        this.tryMove()
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
             }
-        })
+        }
+        });*/
     }
 
 
-    /**
-     * @param {*} x movements left/right
-     * @param {*} y movements up/down
-     */
-    tryMove(x, y) {
-        map.move(this, x, y);
+    tryMove() {
+        let random = randomMove()
+        console.log(random)
+        map.moveIa(this, random[0], random[1]);
     }
 
     /**
@@ -85,30 +105,17 @@ export class Player {
         this.x = x;
         this.y = y;
 
-        const player = document.getElementById("player1");
+        const player = document.getElementById("player2");
         player.style.left = (this.x * widthCase) + "px";
         player.style.top = (this.y * widthCase) + "px";
-        map.allPositions[0] = [this.x, this.y]
-        this.attributes.addLife(x,y);
-        this.attributes.addBomb(x,y);
-        this.attributes.addDamageBomb(x,y);
-        this.attributes.removeLife(x,y)
+
+        this.attributes.addLife(this.x,this.y);
+        this.attributes.addBomb(this.x,this.y);
+        this.attributes.addDamageBomb(this.x,this.y);
+        this.attributes.removeLife(this.x,this.y)
+
     }
 
-    /**
-     * start listening key for put bomb
-     */
-    listeningBomb() {
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode == 32) {
-                if(document.getElementById("player1")){
-
-                this.canBomb();
-                event.preventDefault();
-                event.stopPropagation();}
-            }
-        });
-    }
 
     /**
      * Puts bomb and updates map.grounds and starts trigger
@@ -129,7 +136,7 @@ export class Player {
         bomb.style.height = widthCase + "px";
         bomb.style.left = left + "px";
         bomb.style.top = top + "px";
-        bomb.style.backgroundImage = 'url("bomb.png")';
+        bomb.style.backgroundImage = 'url("../pictures/bomb.png")';
         bomb.style.backgroundSize = "cover";
 
         const caseBomb = document.querySelector(`[row="${top/widthCase}"][column="${left/widthCase}"]`);
@@ -151,9 +158,17 @@ export class Player {
         this.bombs.push(b);
         //trigger detonate
         this.triggerDetonate(b);
-
+        
+        this.escapeDetonate(x, y)
+    
     }
 
+    escapeBomb(){
+            if(map.grounds[this.y][this.x].futureFlame == true){
+                this.tryMove()
+            }
+        
+    }
     /**
      * checking if to put bomb is ok
      */
@@ -165,6 +180,7 @@ export class Player {
         }
         else if (this.attributes.attribut.actuelBomb == this.attributes.attribut.maxBombs){
             return;
+        
         }
         else {
             this.putBomb();
@@ -174,12 +190,27 @@ export class Player {
         
     }
 
+    escapeDetonate(x, y){
+        for (let k = 1; k < this.attributes.attribut.damageBomb; k++) { //around 3 cases
+            this.futureFlame(x - k, y);
+            this.futureFlame(x + k, y);
+            this.futureFlame(x, y +k);
+            this.futureFlame(x, y-k);
+            this.escapeBomb()
+            
+        }
+    }
+    futureFlame(xFuture, yFuture){
+        if(map.grounds[yFuture] && map.grounds[yFuture][xFuture]){
+        map.grounds[yFuture][xFuture].futureflame = true;
+    }}
+
     /**
      * Starting trigger for bomb detonation
      * @param {*} bomb Object => last bomb 
      */
     triggerDetonate(bomb) {
-        let timeBomb = 1 * 1000;
+        let timeBomb = 1 * 3000;
         let timeout = setTimeout(() => {
             bomb.timeout = null
             this.detonate(bomb)
@@ -330,7 +361,7 @@ export class Player {
     flame(xFlame, yFlame) {
 
         const flame = document.createElement("div");
-        flame.style.backgroundImage = 'url("flame.gif")';
+        flame.style.backgroundImage = 'url("../pictures/flame.gif")';
         flame.style.opacity = 0.70;
         flame.style.backgroundColor = "#E4CD8E";
         styleCase(flame);
@@ -363,6 +394,5 @@ export class Player {
         if(xFlame == this.x && yFlame == this.y){
             this.attributes.removeLife(this.x, this.y);}
     }
-}
 
-/// ajouter bonus à chaque perso
+}

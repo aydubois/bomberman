@@ -87,7 +87,7 @@ export class AllPlayers{
         bomb.style.height = widthCase + "px";
         bomb.style.left = left + "px";
         bomb.style.top = top + "px";
-        bomb.style.backgroundImage = 'url("bomb.png")';
+        bomb.style.backgroundImage = 'url("../pictures/bomb.png")';
         bomb.style.backgroundSize = "cover";
 
         const caseBomb = document.querySelector(`[row="${top/widthCase}"][column="${left/widthCase}"]`);
@@ -288,7 +288,7 @@ export class AllPlayers{
     flame(xFlame, yFlame) {
 
         const flame = document.createElement("div");
-        flame.style.backgroundImage = 'url("flame.gif")';
+        flame.style.backgroundImage = 'url("../pictures/flame.gif")';
         flame.style.opacity = 0.70;
         flame.style.backgroundColor = "#E4CD8E";
         styleCase(flame);

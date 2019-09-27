@@ -78,7 +78,7 @@ export class Map{
                 id =randomNum(0, (maxBlock - 1));
             }
             const wall = document.getElementById(id);
-            wall.style.backgroundImage = 'url("wallSoft.jpg")';
+            wall.style.backgroundImage = 'url("../pictures/wallSoft.jpg")';
             wall.style.backgroundSize = "cover";
             wall.style.backgroundColor = "black";
             numberWall--;
@@ -108,7 +108,7 @@ export class Map{
         styleCase(bonus)
         bonus.style.left = x * widthCase + "px";
         bonus.style.top = y * widthCase + "px";
-        bonus.style.backgroundImage = `url("bonus${this.bonusItems[randomItem]}.jpeg")`;
+        bonus.style.backgroundImage = `url("../pictures/bonus${this.bonusItems[randomItem]}.jpeg")`;
         bonus.style.zIndex = -1;
         document.getElementById("divPlayer").appendChild(bonus);
         this.grounds[y][x].bonus = true;
@@ -120,7 +120,7 @@ export class Map{
         const wallHard = document.querySelectorAll(`[row="0"],[row="${this.rows - 1}"],[column="0"],[column="${this.columns - 1}"]`);
 
         for( let block of wallHard){
-            block.style.backgroundImage = 'url("wallHard.jpg")';
+            block.style.backgroundImage = 'url("../pictures/wallHard.jpg")';
             block.style.backgroundSize = "cover";
             block.style.backgroundColor = "black";
 
@@ -152,7 +152,7 @@ export class Map{
         player.className = 'player';
         player.setAttribute("id", "player1");
         styleCase(player);
-        player.style.backgroundImage = 'url("player1.png")';
+        player.style.backgroundImage = 'url("../pictures/player1.png")';
         player.style.zIndex = 2;
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(player);
@@ -162,7 +162,7 @@ export class Map{
         ia1.className = 'ia';
         ia1.setAttribute("id", "player2");
         styleCase(ia1);
-        ia1.style.backgroundImage = 'url("player2.png")';
+        ia1.style.backgroundImage = 'url("../pictures/player2.png")';
         ia1.style.zIndex = 2;
         ia1.style.left = widthCase*13 + "px"; 
         ia1.style.top = widthCase + "px";         
@@ -174,7 +174,7 @@ export class Map{
         styleCase(ia2);
         ia2.style.left = widthCase + "px"; 
         ia2.style.top = widthCase*13 + "px"; 
-        ia2.style.backgroundImage = 'url("player3.png")';
+        ia2.style.backgroundImage = 'url("../pictures/player3.png")';
         ia2.style.zIndex = 2;
         
         divPlayer.appendChild(ia2);
@@ -185,7 +185,7 @@ export class Map{
         styleCase(ia3);
         ia3.style.left = widthCase*13 + "px"; 
         ia3.style.top = widthCase*13 + "px"; 
-        ia3.style.backgroundImage = 'url("player4.png")';
+        ia3.style.backgroundImage = 'url("../pictures/player4.png")';
         ia3.style.zIndex = 2;
         
         divPlayer.appendChild(ia3);

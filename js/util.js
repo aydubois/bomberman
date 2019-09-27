@@ -42,3 +42,15 @@ export function randomMove(){
 }
 
     // two numbers
+
+export function shuffleArray(array){
+    var control = array.length, temp, index;
+    while(control>0){
+        index = Math.floor(Math.random()*control);
+        control--;
+        temp = array[control];
+        array[control] = array[index];
+        array[index] = temp;
+    }
+    return array;
+}
