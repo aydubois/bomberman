@@ -54,7 +54,22 @@ section{
     margin-bottom: 10px;
     text-align: center;
 }
+.settings form{
+    display: flex;
+    align-items: center;
 
+    *{
+        margin-right: 10px;
+    }
+    input[type=submit]{
+        background-color: #F3B334;
+        font-weight: bold;
+        font-size:medium;
+        border-radius: $radius;
+        padding:8px 10px;
+    }
+
+}
 article{
     border: 2px solid violet;
     border-radius: $radius;
@@ -65,6 +80,7 @@ article{
     width: 150px;
     height: 500px;
     margin-left: 40px;
+    white-space: nowrap;
 
     #boxTimer{
         border: 2px solid orange;
@@ -81,7 +97,17 @@ article{
             font-size: xx-large;
         }
     }
+    #life{
+        @extend #boxTimer;
+        border-color: maroon;
+        flex-direction: column;
 
+        h2{
+            text-align: center;
+            margin-bottom: 0;
+        }
+        
+    }
     #score {
         @extend #boxTimer ;
         border-color: maroon;

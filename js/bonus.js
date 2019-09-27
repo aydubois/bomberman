@@ -4,7 +4,7 @@ import { map } from "./map.js";
 export class Attributes {
     constructor() {
         this.attribut = {
-            life: 1,
+            life: 3,
             actuelBomb: 0,
             maxBombs: 1,
             delayBomb: 3,

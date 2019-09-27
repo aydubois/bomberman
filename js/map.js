@@ -158,6 +158,7 @@ export class Map{
         divPlayer.appendChild(player);
 
         //ia
+        
         const ia1 = document.createElement('div');
         ia1.className = 'ia';
         ia1.setAttribute("id", "player2");
@@ -168,6 +169,7 @@ export class Map{
         ia1.style.top = widthCase + "px";         
         divPlayer.appendChild(ia1);
 
+        if(nbEnemy >= 2){
         const ia2 = document.createElement('div');
         ia2.className = 'ia';
         ia2.setAttribute("id", "player3");
@@ -178,7 +180,9 @@ export class Map{
         ia2.style.zIndex = 2;
         
         divPlayer.appendChild(ia2);
+        }
 
+        if(nbEnemy == 3){
         const ia3 = document.createElement('div');
         ia3.className = 'ia';
         ia3.setAttribute("id", "player4");
@@ -189,6 +193,7 @@ export class Map{
         ia3.style.zIndex = 2;
         
         divPlayer.appendChild(ia3);
+        }
     }
     }
 

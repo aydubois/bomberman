@@ -1,7 +1,15 @@
 <?php
+    session_start();
+
 
 // Si le formulaire de connexion à été rempli
  if(isset($_POST['pseudo']) AND isset($_POST['password'])){
+
+    // On vérifie qu'aucune connexion est en cours
+    if($_SESSION){
+        $allready_connect =  'Vous êtes déjà connecté';
+    }
+    else{
     //On récupère les données du formulaires
     $copseudo = htmlspecialchars($_POST['pseudo']);
     $copass = htmlspecialchars($_POST['password']);
@@ -22,7 +30,8 @@
     $copass_ok = password_verify($copass,$pass_hash);
 
     $comail = $aff_connect['mail'];
-    
+
+
     // Si données incorrectes -> retry Sinon ouverture session + cookie
     if($copass_ok==false){
         $data_wrong = "Les informations saisies sont erronnées. <br/> Veuillez recommencer.";
@@ -44,10 +53,15 @@
         }
         elseif(!isset($_POST['auto'])){
             setcookie('auto','unchecked',time()+3600*30,null,null,false,true);
-        }
+        }    
+        //  -> insert timestamp connection
+        $ins_info = $bdd->prepare('UPDATE bomber_user SET last_connexion = NOW() WHERE id = :id');
+        $ins_info->execute(array(
+        'id' => $_SESSION['id']
+        ));
     }
     $connect->closeCursor();
- }
+ }}
 
  //Si les cookies d'identification sont déjà présents
  elseif(isset($_COOKIE['identify']) AND isset($_COOKIE['hash_pass'])AND isset($_COOKIE['auto'])){
@@ -104,12 +118,14 @@
     <?php   if (isset($data_true)){ ?> <div class="connexion_ok"><p> <?php echo $data_true; ?>
     </p>
         <a href="../bomberman.php"><button>Jouer</button></a> </div>
+        <p>
 <?php } 
                     elseif(isset($allreadydata)){echo $allreadydata;}
+                    elseif(isset($allready_connect)){echo $allready_connect;}
                     else{ 
                         if(isset($data_wrong)){echo $data_wrong;}
                         elseif(isset($data_error)){echo $data_error;}
-                    ?>
+                    ?> </p>
         <p>Connecte-toi</p>
         <form action="../php/bomb_connexion.php" method="POST">
             <div class="info"><label>Pseudo : </label><input type="text" name="pseudo"></div>

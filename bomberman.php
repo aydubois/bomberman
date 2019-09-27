@@ -1,3 +1,12 @@
+<?php session_start(); 
+if(isset($_POST['nb_enemy'])){
+    $nb_enemy = $_POST['nb_enemy'];
+    $nb_enemy = (int)$nb_enemy;
+} else{
+    $nb_enemy = 1;
+}
+    $nb_enemy = json_encode($nb_enemy);
+?>
 <!DOCTYPE html>
 
 <head>
@@ -8,6 +17,9 @@
 
 </head>
 
+<script> let nbEnemy = <?= $nb_enemy ?> ; 
+console.log(nbEnemy);
+</script>
 <body>
     <header>
         <img src="./pictures/logo.png" alt="logo">
@@ -16,16 +28,40 @@
     </header>
 
     <section>
+        <?php if(isset($_SESSION['id'])){ ?>
+        <div class="settings">
+            <form action="bomberman.php" method="POST">
+                <h2>Nombre d'adversaires : </h2>
+                <input type="radio" name="nb_enemy" value="1" checked>
+                <label for="1"> 1 </label>
+                <input type="radio" name="nb_enemy" value="2">
+                <label for="2"> 2 </label>
+                <input type="radio" name="nb_enemy" value="3">
+                <label for="3"> 3 </label>
+
+                <input type="submit" value="enregistrer les changements">
+            </form>
+        </div>
         <button id="start">Commencer</button>
         <div id="sentence">
-            <p>  ...Et c'est parti pour le show ! Tout le monde est prêt, tout le monde est chaud !</p>
+            <p> Bonjour <?= $_SESSION['pseudo'] ?>, nous sommes prêts à combattre.</p> <?php }else{ ?>
+            <p> Vous devez être connecté pour jouer. </p>
+            <?php } ?>
         </div>
         <div id="main_wrapper">
             <article>
                 <div id="boxTimer">
                     <p id="timer"></p>
                 </div>
-
+                <div id="life">
+                    <h2>Vies <br /> restantes : </h2>
+                    <p> <?= $_SESSION['pseudo'] ?> : ...</p>
+                    <p> Adversaire 1 : <span id='life_ai_1'>  </span></p>
+            <?php if($nb_enemy > 2){ ?> <p> Adversaire 2 : <span id='life_ai_2'>  </span></p> <?php } 
+            if($nb_enemy == 3){ ?>
+                <p> Adversaire 3 : <span id='life_ai_3'>  </span></p>
+        <?php    } ?>
+                </div>
                 <div id="score">
                     <h2>Scores : </h2>
                 </div>
@@ -34,7 +70,6 @@
             <div id="game"></div>
             <div id="divPlayer"></div>
 
-            <div id="settings"></div>
         </div>
     </section>
 

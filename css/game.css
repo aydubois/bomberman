@@ -56,6 +56,21 @@ section {
   text-align: center;
 }
 
+.settings form {
+  display: flex;
+  align-items: center;
+}
+.settings form * {
+  margin-right: 10px;
+}
+.settings form input[type=submit] {
+  background-color: #F3B334;
+  font-weight: bold;
+  font-size: medium;
+  border-radius: 20px;
+  padding: 8px 10px;
+}
+
 article {
   border: 2px solid violet;
   border-radius: 20px;
@@ -66,8 +81,9 @@ article {
   width: 150px;
   height: 500px;
   margin-left: 40px;
+  white-space: nowrap;
 }
-article #boxTimer, article #score {
+article #boxTimer, article #score, article #life {
   border: 2px solid orange;
   border-radius: 20px;
   min-height: 100px;
@@ -77,9 +93,17 @@ article #boxTimer, article #score {
   align-items: center;
   background-color: #E9996D;
 }
-article #boxTimer #timer, article #score #timer {
+article #boxTimer #timer, article #score #timer, article #life #timer {
   font-weight: bold;
   font-size: xx-large;
+}
+article #life {
+  border-color: maroon;
+  flex-direction: column;
+}
+article #life h2 {
+  text-align: center;
+  margin-bottom: 0;
 }
 article #score {
   border-color: maroon;
