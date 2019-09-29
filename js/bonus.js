@@ -11,7 +11,12 @@ export class Attributes {
             damageBomb: 3
         }
         this.dead = false
+        this.initLife();
 
+    }
+
+    initLife() {
+        document.getElementById("player_life").textContent = this.attribut.life;
     }
 
     removeLife(x,y) {
@@ -29,6 +34,7 @@ export class Attributes {
             document.getElementById("main_wrapper").replaceChild(end, game);
             document.getElementById("main_wrapper").removeChild(divPlayer);
         }
+        this.initLife();
     }
     }
 

@@ -17,9 +17,7 @@ if(isset($_POST['nb_enemy'])){
 
 </head>
 
-<script> let nbEnemy = <?= $nb_enemy ?> ; 
-console.log(nbEnemy);
-</script>
+<script> let nbEnemy = <?= $nb_enemy ?> ; </script>
 <body>
     <header>
         <img src="./pictures/logo.png" alt="logo">
@@ -55,7 +53,7 @@ console.log(nbEnemy);
                 </div>
                 <div id="life">
                     <h2>Vies <br /> restantes : </h2>
-                    <p> <?= $_SESSION['pseudo'] ?> : ...</p>
+                    <p> <?= $_SESSION['pseudo'] ?> : <span id="player_life"> </span></p>
                     <p> Adversaire 1 : <span id='life_ai_1'>  </span></p>
             <?php if($nb_enemy > 2){ ?> <p> Adversaire 2 : <span id='life_ai_2'>  </span></p> <?php } 
             if($nb_enemy == 3){ ?>

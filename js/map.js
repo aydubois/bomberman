@@ -202,19 +202,7 @@ export class Map{
         let xFinal = player.x + x;
         let yFinal = player.y - y;
         if(!this.grounds[yFinal][xFinal]){return}
-        else if(this.grounds[yFinal][xFinal].hardWall == false && this.grounds[yFinal][xFinal].softWall == false){
-            player.move(xFinal, yFinal);
-        }
-    }
-    moveIa(player, x, y){
-
-        let xFinal = player.x + x;
-        let yFinal = player.y - y;
-        if(this.grounds[yFinal][xFinal].hardWall == true){
-            console.log("retry")
-            player.tryMove()
-        }
-        else if(this.grounds[yFinal][xFinal].hardWall == false && this.grounds[yFinal][xFinal].softWall == false){
+        else if(this.grounds[yFinal][xFinal].hardWall == false && this.grounds[yFinal][xFinal].softWall == false && this.grounds[yFinal][xFinal].bomb == false){
             player.move(xFinal, yFinal);
         }
     }

@@ -193,7 +193,7 @@ export class Player {
      */
     detonate(bomb) {
         //search bomb to detonate and remove attributes
-        map.grounds[bomb.y][bomb.x].bomb = null;
+        map.grounds[bomb.y][bomb.x].bomb = false;
         bomb.bomb.remove()
         this.attributes.attribut.actuelBomb--;
         let index = this.bombs.indexOf(bomb);

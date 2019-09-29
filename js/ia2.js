@@ -21,16 +21,13 @@ export class Ia {
         this.xNext = 0;
         this.yNext = 0;
         this.nbTry = 0;
-        this.attributes = new AttributesIa;
+        this.attributes = new AttributesIa();
         this.initPosition();
         this.positionActuel = [this.x, this.y];
         this.historyPositions = [this.position];
         map.allPositions[1] = this.positionActuel;
         this.nextMouvement = null;
-        this.startIa();
-        this.startBomb();
-        this.unblock();
-
+        this.arrayIntervals =[];
     }
 
     initPosition() {
@@ -58,17 +55,20 @@ export class Ia {
     
 
     startIa() {
-        setInterval(()=>{
+        var intervalStart = setInterval(()=>{
             if(document.getElementById(`player${this.number}`)){   /// 
                 this.searchDirectionTarget();
                 
         }}, 1000);
+        this.arrayIntervals.push(intervalStart);
     }
     startBomb(){
-        setInterval(()=>{
+        var intervalBomb = setInterval(()=>{
         if(document.getElementById(`player${this.number}`)){
             this.putBomb();
     }}, 4000);
+    this.arrayIntervals.push(intervalBomb);
+
     }
 
     searchDirectionTarget() {
@@ -111,19 +111,19 @@ export class Ia {
         this.setNextmove();}
 
         else{
-            if(map.grounds[yposition+1][xposition].futureflame == false && map.grounds[yposition+1][xposition].softWall == false && map.grounds[yposition+1][xposition].hardWall == false){
+            if(map.grounds[yposition+1][xposition].futureflame == false && map.grounds[yposition+1][xposition].softWall == false && map.grounds[yposition+1][xposition].hardWall == false && map.grounds[yposition+1][xposition].bomb == false){
                 yDirection = "S"
             this.nextMouvement = yDirection
 
-            } else if (map.grounds[yposition -1][xposition].futureflame == false && map.grounds[yposition-1][xposition].softWall == false && map.grounds[yposition-1][xposition].hardWall == false){
+            } else if (map.grounds[yposition -1][xposition].futureflame == false && map.grounds[yposition-1][xposition].softWall == false && map.grounds[yposition-1][xposition].hardWall == false && map.grounds[yposition-1][xposition].bomb == false){
                 yDirection = "N"
             this.nextMouvement = yDirection
 
-            } else if (map.grounds[yposition][xposition+1].futureflame == false && map.grounds[yposition][xposition+1].softWall == false && map.grounds[yposition][xposition+1].hardWall == false){
+            } else if (map.grounds[yposition][xposition+1].futureflame == false && map.grounds[yposition][xposition+1].softWall == false && map.grounds[yposition][xposition+1].hardWall == false && map.grounds[yposition][xposition+1].bomb == false){
                 xDirection = "E"
             this.nextMouvement = xDirection
 
-            } else if(map.grounds[yposition][xposition-1].futureflame == false && map.grounds[yposition][xposition-1].softWall == false && map.grounds[yposition][xposition-1].hardWall == false){ 
+            } else if(map.grounds[yposition][xposition-1].futureflame == false && map.grounds[yposition][xposition-1].softWall == false && map.grounds[yposition][xposition-1].hardWall == false && map.grounds[yposition][xposition-1].bomb == false){ 
                 xDirection = "W" 
                 this.nextMouvement = xDirection
             } else{
@@ -163,7 +163,7 @@ export class Ia {
     
     avoidWallsAndFlames(){
         
-        if((map.grounds[this.y + this.yNext][this.x + this.xNext].softWall == true || map.grounds[this.y + this.yNext][this.x + this.xNext].hardWall == true  || map.grounds[this.y + this.yNext][this.x + this.xNext].flame == true) && this.nbTry <=3){
+        if((map.grounds[this.y + this.yNext][this.x + this.xNext].softWall == true || map.grounds[this.y + this.yNext][this.x + this.xNext].hardWall == true  || map.grounds[this.y + this.yNext][this.x + this.xNext].flame == true   || map.grounds[this.y + this.yNext][this.x + this.xNext].bomb == true) && this.nbTry <=3){
             //si il y a un mur mou poser une bombe et sortir du champs de la bombe
             
                 let aA = ["W", "E", "S", "N"];
@@ -204,21 +204,28 @@ export class Ia {
     move() {
         this.x += this.xNext;
         this.y += this.yNext;
+        let x = this.x;
+        let y = this.y; 
+
         this.nbTry = 0;
 
         const player = document.getElementById(`player${this.number}`);
-        player.style.left = (this.x * widthCase) + "px";
-        player.style.top = (this.y * widthCase) + "px";
+        player.style.left = (x * widthCase) + "px";
+        player.style.top = (y * widthCase) + "px";
 
-        this.positionActuel[0] = this.x;
-        this.positionActuel[1] = this.y;
+        this.positionActuel[0] = x;
+        this.positionActuel[1] = y;
         map.allPositions[1] = this.position;
         this.historyPositions.push(this.positionActuel);
+        this.attributes.addLife(x,y);
+        this.attributes.addBomb(x,y);
+        this.attributes.addDamageBomb(x,y);
+        this.attributes.removeLife(x,y)
         
     }
     
     unblock(){
-        setInterval(()=>{
+        var intervalUnblock = setInterval(()=>{
             let sizePosition = this.historyPositions.length;
             if(this.historyPositions[sizePosition-1] == this.historyPositions[sizePosition-3] ){
                 if(this.nextMouvement == "N" || this.nextMouvement == "S"){
@@ -237,6 +244,7 @@ export class Ia {
                 this.setNextmove()
             }}
         }, 3000)
+        this.arrayIntervals.push(intervalUnblock);
 
     }
 
@@ -461,7 +469,7 @@ export class Ia {
         }
 
         let nblife = this.attributes.attribut.life;
-        setInterval(()=>{
+        var intervalRemoveLife = setInterval(()=>{
             if(xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame == true){
                 if(nblife == this.attributes.attribut.life){
                 this.attributes.removeLife(this.x, this.y);}}
@@ -482,7 +490,19 @@ export class Ia {
             });
             
         }, 1000)
+        this.arrayIntervals.push(intervalRemoveLife);
+
     }
 
+    stopIA(){
+        setInterval(()=>{
+            if(this.attributes.attribut.life == 0){
+                clearInterval(this.arrayIntervals[0]);
+                clearInterval(this.arrayIntervals[1]);
+                clearInterval(this.arrayIntervals[2]);
+                clearInterval(this.arrayIntervals[3]);
 
+            }
+        }, 1000)
+    }
 }

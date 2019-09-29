@@ -30,22 +30,14 @@ export class AttributesIa {
     removeLife(x, y) {
         if (map.grounds[y][x].flame == true) {
             this.attribut.life--;
-            console.log(this.attribut.life)
             document.getElementById("sentence").textContent = "Le joueur " + this.attribut.number + " a perdu une vie";
 
             if (this.attribut.life <= 0) {
                 this.dead = true;
                 document.getElementById(`player${this.attribut.number}`).remove();
                 document.getElementById("sentence").textContent = "le joueur " + this.attribut.number + " est mort";
-
-
-                document.getElementById("start").textContent = "Remise à zéro";
-                let end = document.createElement("div");
-                end.setAttribute("id", "end");
-                end.textContent = "You WIN"
-                document.getElementById("main_wrapper").replaceChild(end, game);
-                document.getElementById("main_wrapper").removeChild(divPlayer);
             }
+            this.initLife();
         }
     }
 
