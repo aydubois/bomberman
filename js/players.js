@@ -170,7 +170,6 @@ export class Player {
             this.putBomb();
         }
 
-        //check max bomb
         
     }
 
@@ -206,9 +205,14 @@ export class Player {
         this.detonateRight(x, y)
         this.detonateBottom(x, y)
         this.detonateTop(x, y)
+        this.detonateHere(x,y)
 
     }
+    
+    detonateHere(x,y){
 
+        this.flame(x, y);
+    }
     /**
      * first if : if cases to the left of bomb are nonexistent
      * second : if player is on this case

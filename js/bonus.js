@@ -48,7 +48,7 @@ export class Attributes {
             setTimeout(()=>{
                 document.getElementById("sentence").textContent = " ";
             }, 2000);
-
+            this.initLife();
         }
     }
 

@@ -55,7 +55,7 @@ if(isset($_POST['nb_enemy'])){
                     <h2>Vies <br /> restantes : </h2>
                     <p> <?= $_SESSION['pseudo'] ?> : <span id="player_life"> </span></p>
                     <p> Adversaire 1 : <span id='life_ai_1'>  </span></p>
-            <?php if($nb_enemy > 2){ ?> <p> Adversaire 2 : <span id='life_ai_2'>  </span></p> <?php } 
+            <?php if($nb_enemy >= 2){ ?> <p> Adversaire 2 : <span id='life_ai_2'>  </span></p> <?php } 
             if($nb_enemy == 3){ ?>
                 <p> Adversaire 3 : <span id='life_ai_3'>  </span></p>
         <?php    } ?>

@@ -52,7 +52,7 @@ export class AttributesIa {
             setTimeout(() => {
                 document.getElementById("sentence").textContent = " ";
             }, 2000);
-
+            this.initLife();
         }
     }
 

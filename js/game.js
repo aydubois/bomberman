@@ -6,15 +6,17 @@ import {
 } from "./players.js";
 import {
     Ia
-} from "../js/ia2.js";
+} from "../js/ia4.js";
 
 map.initSet(15, 15);
 
 class GameStarter {
     constructor() {
+        this.player1 = null;
         this.ia1 = null;
         this.ia2 = null;
         this.ia3 = null;
+        this.intervalEnd = null;
         this.init();
     }
     
@@ -27,14 +29,16 @@ class GameStarter {
             if(this.starter == null || this.starter.finished == true){
                 
                 this.initAllPlayers();}
+                this.interval();
                 this.endGame();
-                this.debug();
         })
     }
     initAllPlayers() {
 
 
-        let player1 = new Player();  
+        let player1 = new Player();
+        this.player1 = player1;
+    
         let ia1 = new Ia(2);
         ia1.startIa();
         ia1.startBomb();
@@ -44,7 +48,7 @@ class GameStarter {
         this.ia1 = ia1;
 
         
-        if (nbEnemy >= 2) {
+        if (nbEnemy == 2 || nbEnemy == 3) {
             let ia2 = new Ia(3);
             ia2.startIa();
             ia2.startBomb();
@@ -68,45 +72,55 @@ class GameStarter {
     
 
     endGame(){
+        let end = document.createElement("div");
+        end.setAttribute("id", "end");
+        end.textContent = "You WIN";
+
+        let divGame = document.getElementById('game');
         
+        if(this.player1.attributes.attribut.life == 0){
+            ia1 = null;
+            ia2 = null;
+            ia3 = null;
+            clearInterval(this.intervalEnd)
+            return
+        }
+
         if(nbEnemy == 3 && this.ia2.attributes.attribut.life == 0 && this.ia1.attributes.attribut.life == 0 && this.ia3.attributes.attribut.life == 0){
             document.getElementById("start").textContent = "Remise à zéro";
-            let end = document.createElement("div");
-            end.setAttribute("id", "end");
-            end.textContent = "You WIN"
-            document.getElementById("main_wrapper").replaceChild(end, game);
+            document.getElementById("main_wrapper").replaceChild(end, divGame);
             document.getElementById("main_wrapper").removeChild(divPlayer);
             ia1 = null;
             ia2 = null;
             ia3 = null;
+            clearInterval(this.intervalEnd);
 
-        } else if(nbEnemy == 2 && !this.ia1.attributes.attribut.life == 0 && this.ia2.attributes.attribut.life == 0){
+        } else if(nbEnemy == 2 && this.ia1.attributes.attribut.life == 0 && this.ia2.attributes.attribut.life == 0){
             document.getElementById("start").textContent = "Remise à zéro";
-            let end = document.createElement("div");
-            end.setAttribute("id", "end");
-            end.textContent = "You WIN"
-            document.getElementById("main_wrapper").replaceChild(end, game);
+
+            document.getElementById("main_wrapper").replaceChild(end, divGame);
             document.getElementById("main_wrapper").removeChild(divPlayer);
             ia1 = null;
             ia2 = null;
+            clearInterval(this.intervalEnd);
+            
         } 
         else  if(nbEnemy == 1 && this.ia1.attributes.attribut.life == 0){
             document.getElementById("start").textContent = "Remise à zéro";
-            let end = document.createElement("div");
-            end.setAttribute("id", "end");
-            end.textContent = "You WIN"
-            document.getElementById("main_wrapper").replaceChild(end, game);
+
+            document.getElementById("main_wrapper").replaceChild(end, divGame);
             document.getElementById("main_wrapper").removeChild(divPlayer);
             this.ia1 = null;
+            clearInterval(this.intervalEnd);
         }
+
     }
 
-    debug(){
-        setInterval(()=>{
-        console.log('ia1 :' + this.ia1)
-        console.log('nb life ia1 : ' + this.ia1.attributes.attribut.life )
-        
-        }, 1000);
+    interval(){
+        var intervalEndGame = setInterval(()=>{
+            this.endGame();
+        }, 2000);
+        this.intervalEnd = intervalEndGame;
     }
 }
 let gameStart = new GameStarter();

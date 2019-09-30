@@ -1,4 +1,3 @@
-
 import {
     map
 } from "./map.js";
@@ -27,7 +26,7 @@ export class Ia {
         this.historyPositions = [];
         map.allPositions[1] = this.positionActuel;
         this.nextMouvement = null;
-        this.arrayIntervals =[];
+        this.arrayIntervals = [];
 
         this.debug();
     }
@@ -54,22 +53,24 @@ export class Ia {
             this.attributes.numberBonus(4);
         }
     }
-    
+
 
     startIa() {
-        var intervalStart = setInterval(()=>{
-            if(document.getElementById(`player${this.number}`)){   /// 
+        var intervalStart = setInterval(() => {
+            if (document.getElementById(`player${this.number}`)) { /// 
                 this.searchDirectionTarget();
-                
-        }}, 1000);
+
+            }
+        }, 800);
         this.arrayIntervals.push(intervalStart);
     }
-    startBomb(){
-        var intervalBomb = setInterval(()=>{
-        if(document.getElementById(`player${this.number}`)){
-            this.putBomb();
-    }}, 4000);
-    this.arrayIntervals.push(intervalBomb);
+    startBomb() {
+        var intervalBomb = setInterval(() => {
+            if (document.getElementById(`player${this.number}`)) {
+                this.canBomb();
+            }
+        }, 4000);
+        this.arrayIntervals.push(intervalBomb);
 
     }
 
@@ -85,9 +86,6 @@ export class Ia {
         let xDistance;
         let yDistance;
 
-
-        if(map.grounds[yposition][xposition].futureflame == false){
-
         if (xposition > xplayer) {
             xDistance = xposition - xplayer;
             xDirection = "W";
@@ -95,7 +93,7 @@ export class Ia {
             xDistance = xplayer - xposition;
             xDirection = "E";
         }
-    
+
         if (yposition > yplayer) {
             yDistance = yposition - yplayer;
             yDirection = "N";
@@ -103,38 +101,16 @@ export class Ia {
             yDistance = yplayer - yposition;
             yDirection = "S";
         }
-    
+
         if (xDistance > yDistance) {
-            this.nextMouvement = xDirection; 
+            this.nextMouvement = xDirection;
         } else {
-            this.nextMouvement = yDirection; 
+            this.nextMouvement = yDirection;
         }
-        
-        this.setNextmove();}
 
-        else{
-            if(map.grounds[yposition+1][xposition].futureflame == false && map.grounds[yposition+1][xposition].softWall == false && map.grounds[yposition+1][xposition].hardWall == false && map.grounds[yposition+1][xposition].bomb == false){
-                yDirection = "S"
-            this.nextMouvement = yDirection
+        this.setNextmove();
 
-            } else if (map.grounds[yposition -1][xposition].futureflame == false && map.grounds[yposition-1][xposition].softWall == false && map.grounds[yposition-1][xposition].hardWall == false && map.grounds[yposition-1][xposition].bomb == false){
-                yDirection = "N"
-            this.nextMouvement = yDirection
 
-            } else if (map.grounds[yposition][xposition+1].futureflame == false && map.grounds[yposition][xposition+1].softWall == false && map.grounds[yposition][xposition+1].hardWall == false && map.grounds[yposition][xposition+1].bomb == false){
-                xDirection = "E"
-            this.nextMouvement = xDirection
-
-            } else if(map.grounds[yposition][xposition-1].futureflame == false && map.grounds[yposition][xposition-1].softWall == false && map.grounds[yposition][xposition-1].hardWall == false && map.grounds[yposition][xposition-1].bomb == false){ 
-                xDirection = "W" 
-                this.nextMouvement = xDirection
-            } else{
-                this.nextMouvement = this.nextMouvement;
-            }
-            
-            this.setNextmove();
-            
-        }
     }
 
     setNextmove() {
@@ -159,11 +135,49 @@ export class Ia {
                 this.yNext = 1;
                 break;
         }
-        this.avoidWallsAndFlames();
+        this.verifCaseAround();
     }
 
-    
-    avoidWallsAndFlames(){
+    verifCaseAround() {
+        if ((map.grounds[this.y + this.yNext][this.x + this.xNext].softWall == true ||
+                map.grounds[this.y + this.yNext][this.x + this.xNext].hardWall == true ||
+                map.grounds[this.y + this.yNext][this.x + this.xNext].bomb == true) &&
+            this.nbTry <= 3) {
+            let aA = ["W", "E", "S", "N"];
+            aA = aA.filter(e => e != this.nextMouvement)
+
+            let random = aA[Math.floor(Math.random() * aA.length)];
+            this.nextMouvement = random;
+
+            this.nbTry++;
+            this.setNextmove();
+        } else if (this.nbTry > 3) {
+            this.yNext = 0;
+            this.xNext = 0;
+            this.avoidFlame();
+        } else {
+            this.avoidFlame();
+        }
+    }
+
+    avoidFlame() {
+        if ((map.grounds[this.y + this.yNext][this.x + this.xNext].flame == true ||
+                map.grounds[this.y + this.yNext][this.x + this.xNext].futureFlame == true) &&
+            this.nbTry <= 3) {
+            let aA = ["W", "E", "S", "N"];
+            aA = aA.filter(e => e != this.nextMouvement)
+
+            let random = aA[Math.floor(Math.random() * aA.length)];
+            this.nextMouvement = random;
+
+            this.nbTry++;
+            this.setNextmove();
+        } else {
+            this.move();
+        }
+    }
+
+    /* avoidWallsAndFlames(){
         
         if((map.grounds[this.y + this.yNext][this.x + this.xNext].softWall == true || map.grounds[this.y + this.yNext][this.x + this.xNext].hardWall == true  || map.grounds[this.y + this.yNext][this.x + this.xNext].flame == true   || map.grounds[this.y + this.yNext][this.x + this.xNext].bomb == true) && this.nbTry <=3){
         
@@ -180,24 +194,24 @@ export class Ia {
         else{
             
             this.move();}
-    }
+    } */
 
 
 
 
-    placeMapFlame(x,y){
+    placeMapFlame(x, y) {
 
-            for (let k = 1; k < this.attributes.attribut.damageBomb; k++) { //around 3 cases
-                this.futureFlame(x - k, y);
-                this.futureFlame(x + k, y);
-                this.futureFlame(x, y +k);
-                this.futureFlame(x, y-k);
-                
-                
-            }
+        for (let k = 1; k < this.attributes.attribut.damageBomb; k++) { //around 3 cases
+            this.futureFlame(x - k, y);
+            this.futureFlame(x + k, y);
+            this.futureFlame(x, y + k);
+            this.futureFlame(x, y - k);
+
+
         }
-    futureFlame(xFuture, yFuture){
-            if(map.grounds[yFuture] && map.grounds[yFuture][xFuture]){
+    }
+    futureFlame(xFuture, yFuture) {
+        if (map.grounds[yFuture] && map.grounds[yFuture][xFuture]) {
             map.grounds[yFuture][xFuture].futureflame = true;
         }
     }
@@ -207,53 +221,75 @@ export class Ia {
 
 
     move() {
-        this.x += this.xNext;
-        this.y += this.yNext;
-        let x = this.x;
-        let y = this.y; 
+        if (map.grounds[this.y + this.yNext][this.x + this.xNext].softWall == false &&
+            map.grounds[this.y + this.yNext][this.x + this.xNext].hardWall == false &&
+            map.grounds[this.y + this.yNext][this.x + this.xNext].bomb == false
+        ) {
+            this.x += this.xNext;
+            this.y += this.yNext;
+            let x = this.x;
+            let y = this.y;
 
-        this.nbTry = 0;
+            this.nbTry = 0;
 
-        const player = document.getElementById(`player${this.number}`);
-        player.style.left = (x * widthCase) + "px";
-        player.style.top = (y * widthCase) + "px";
+            const player = document.getElementById(`player${this.number}`);
+            player.style.left = (x * widthCase) + "px";
+            player.style.top = (y * widthCase) + "px";
 
-        this.positionActuel[0] = x;
-        this.positionActuel[1] = y;
-        map.allPositions[1] = this.positionActuel;
-        this.historyPositions.push([x, y]);
-        this.attributes.addLife(x,y);
-        this.attributes.addBomb(x,y);
-        this.attributes.addDamageBomb(x,y);
-        this.attributes.removeLife(x,y)
-        
+            this.positionActuel[0] = x;
+            this.positionActuel[1] = y;
+            map.allPositions[1] = this.positionActuel;
+            this.historyPositions.push([x, y]);
+            this.attributes.addLife(x, y);
+            this.attributes.addBomb(x, y);
+            this.attributes.addDamageBomb(x, y);
+            this.attributes.removeLife(x, y)
+        }
+        let sizePosition = this.historyPositions.length;
+        if(sizePosition >= 6){
+            this.historyPositions.shift();
+        }
     }
-    
-    unblock(){
-        var intervalUnblock = setInterval(()=>{
-            let sizePosition = this.historyPositions.length;
-            if(this.historyPositions[sizePosition-1] == this.historyPositions[sizePosition-3] && this.historyPositions[sizePosition-2] == this.historyPositions[sizePosition-4] ){
-                if(this.nextMouvement == "N" || this.nextMouvement == "S"){
-                let aA = ["W", "E"];
-                let random = aA[Math.floor(Math.random()*aA.length)];
-                
-                this.nextMouvement = random;
-                this.setNextmove();
-            }
-            else{
-                let aA = ["S", "N"];
-                let random = aA[Math.floor(Math.random()*aA.length)];
-                
 
-                this.nextMouvement = random;
-                this.setNextmove()
-            }}
+    unblock() {
+        var intervalUnblock = setInterval(() => {
+            let sizePosition = this.historyPositions.length;
+            if (this.historyPositions[sizePosition - 1] == this.historyPositions[sizePosition - 3] &&
+                 this.historyPositions[sizePosition - 2] == this.historyPositions[sizePosition - 4]) {
+                if (this.nextMouvement == "N" || this.nextMouvement == "S") {
+                    let aA = ["W", "E"];
+                    let random = aA[Math.floor(Math.random() * aA.length)];
+
+                    this.nextMouvement = random;
+                    this.setNextmove();
+                } else {
+                    let aA = ["S", "N"];
+                    let random = aA[Math.floor(Math.random() * aA.length)];
+
+
+                    this.nextMouvement = random;
+                    this.setNextmove()
+                }
+                clearInterval(intervalStart);
+                setInterval(intervalStart)
+            }
         }, 5000)
         this.arrayIntervals.push(intervalUnblock);
 
     }
 
-    putBomb(){
+    canBomb() {
+
+        if (map.grounds[this.y][this.x].bomb == true) {
+            return;
+        } else if (this.attributes.attribut.actuelBomb == this.attributes.attribut.maxBombs) {
+            return;
+        } else {
+            this.putBomb();
+        }
+    }
+
+    putBomb() {
         // search this position 
         let left = this.x * widthCase;
         let top = this.y * widthCase;
@@ -290,9 +326,11 @@ export class Ia {
         this.triggerDetonate(b);
         this.placeMapFlame(x, y);
 
+        this.avoidFlame();
+
     }
 
-        /**
+    /**
      * Starting trigger for bomb detonation
      * @param {*} bomb Object => last bomb 
      */
@@ -311,20 +349,21 @@ export class Ia {
      */
     detonate(bomb) {
         //search bomb to detonate and remove attributes
-        let x = bomb.x;
-        let y = bomb.y;
+        map.grounds[bomb.y][bomb.x].bomb = false;
+        bomb.bomb.remove()
         this.attributes.attribut.actuelBomb--;
         let index = this.bombs.indexOf(bomb);
         if (index != -1) {
             this.bombs.splice(index, 1);
         };
+        let x = bomb.x;
+        let y = bomb.y;
         this.detonateLeft(x, y)
         this.detonateRight(x, y)
         this.detonateBottom(x, y)
         this.detonateTop(x, y)
-        bomb.bomb.remove()
-        map.grounds[bomb.y][bomb.x].bomb = false;
-        
+        this.detonateHere(x,y)
+
 
     }
 
@@ -348,7 +387,7 @@ export class Ia {
             if (map.grounds[y][x - k].softWall == true && map.grounds[y][x - k].hardWall == false) {
 
                 map.grounds[y][x - k].softWall = false;
-                if(map.grounds[y][x - k].bonus == true){
+                if (map.grounds[y][x - k].bonus == true) {
                     let bonusSelect = document.querySelector(`.bonus[x="${x-k}"][y="${y}"]`);
                     bonusSelect.style.zIndex = 1;
                 }
@@ -375,7 +414,7 @@ export class Ia {
             if (map.grounds[y][x + k].softWall == true && map.grounds[y][x + k].hardWall == false) {
 
                 map.grounds[y][x + k].softWall = false;
-                if(map.grounds[y][x + k].bonus == true){
+                if (map.grounds[y][x + k].bonus == true) {
                     let bonusSelect = document.querySelector(`.bonus[x="${x+k}"][y="${y}"]`);
                     bonusSelect.style.zIndex = 1;
                 }
@@ -402,7 +441,7 @@ export class Ia {
             if (map.grounds[y - k][x].softWall == true && map.grounds[y - k][x].hardWall == false) {
 
                 map.grounds[y - k][x].softWall = false;
-                if(map.grounds[y-k][x].bonus == true){
+                if (map.grounds[y - k][x].bonus == true) {
                     let bonusSelect = document.querySelector(`.bonus[x="${x}"][y="${y-k}"]`);
                     bonusSelect.style.zIndex = 1;
                 }
@@ -429,7 +468,7 @@ export class Ia {
             if (map.grounds[y + k][x].softWall == true && map.grounds[y + k][x].hardWall == false) {
 
                 map.grounds[y + k][x].softWall = false;
-                if(map.grounds[y+k][x].bonus == true){
+                if (map.grounds[y + k][x].bonus == true) {
                     let bonusSelect = document.querySelector(`.bonus[x="${x}"][y="${y+k}"]`);
                     bonusSelect.style.zIndex = 1;
                 }
@@ -437,6 +476,10 @@ export class Ia {
             }
 
         }
+    }
+    detonateHere(x,y){
+ 
+            this.flame(x, y);
     }
 
     /**
@@ -447,7 +490,7 @@ export class Ia {
      * @param {*} yFlame Position y of flame
      */
     flame(xFlame, yFlame) {
-        
+
         const flame = document.createElement("div");
         flame.style.backgroundImage = 'url("../pictures/flame.gif")';
         flame.style.opacity = 0.70;
@@ -459,30 +502,32 @@ export class Ia {
         const divPlayer = document.getElementById("divPlayer");
         divPlayer.appendChild(flame);
         map.grounds[yFlame][xFlame].flame = true;
-        
-        
-        
+
+
+
         if (map.grounds[yFlame][xFlame].bomb) {
-            
+
             if (map.grounds[yFlame][xFlame].bomb.timeout) {
                 clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
                 map.grounds[yFlame][xFlame].bomb.timeout = null;
-                
+
                 setTimeout(() => {
                     this.detonate(map.grounds[yFlame][xFlame].bomb)
-                }, 150)
-                
+                }, 300)
+
             }
             map.grounds[yFlame][xFlame].bomb = false;
         }
 
         let nblife = this.attributes.attribut.life;
-        var intervalRemoveLife = setInterval(()=>{
-            if(xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame == true){
-                if(nblife == this.attributes.attribut.life){
-                this.attributes.removeLife(this.x, this.y);}}
-            
-        },1000)
+        var intervalRemoveLife = setInterval(() => {
+            if (xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame == true) {
+                if (nblife == this.attributes.attribut.life) {
+                    this.attributes.removeLife(this.x, this.y);
+                }
+            }
+
+        }, 800)
         setTimeout(() => {
             map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
             map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
@@ -490,21 +535,23 @@ export class Ia {
             map.grounds[yFlame][xFlame].futureflame = false;
 
             flame.remove();
-            clearInterval(()=>{
-                if(xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame == true){
-                    if(nblife == this.attributes.attribut.life){
-                    this.attributes.removeLife(this.x, this.y);}}
-                
+            clearInterval(() => {
+                if (xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame == true) {
+                    if (nblife == this.attributes.attribut.life) {
+                        this.attributes.removeLife(this.x, this.y);
+                    }
+                }
+
             });
-            
+
         }, 1000)
         this.arrayIntervals.push(intervalRemoveLife);
 
     }
 
-    stopIA(){
-        setInterval(()=>{
-            if(this.attributes.attribut.life == 0){
+    stopIA() {
+        setInterval(() => {
+            if (this.attributes.attribut.life == 0) {
                 clearInterval(this.arrayIntervals[0]);
                 clearInterval(this.arrayIntervals[1]);
                 clearInterval(this.arrayIntervals[2]);
@@ -515,8 +562,8 @@ export class Ia {
     }
 
 
-    debug(){
-        var intervalDebug = setInterval(()=>{
+    debug() {
+        var intervalDebug = setInterval(() => {
             console.log("Tableau de bombes : " + this.bombs)
             console.log("Nombre d'essais de mvmts : " + this.nbTry)
             console.log("Prochains mouvements (x,y) : " + this.xNext + " , " + this.yNext)
@@ -524,10 +571,10 @@ export class Ia {
             console.log("Position actuelle (x,y) : " + this.positionActuel)
             console.log("Historique des positions : " + this.historyPositions)
             console.log(" ")
-            
-        }, 1000)
+
+        }, 10000)
         this.arrayIntervals.push(intervalDebug);
     }
-    
+
 
 }
