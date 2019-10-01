@@ -20,9 +20,13 @@ export class Player {
         this.sizeArray = 0;
         this.attributes = new Attributes;
         this.position = [this.x, this.y]
+        this.nbTryDetonate = 0;
         map.allPositions[0] = this.position;
         this.startListening();
         this.listeningBomb();
+        map.initAll(this)
+
+        this.removeLife()
     }
     /**
      * start listening to the player's movements
@@ -69,7 +73,12 @@ export class Player {
         })
     }
 
+    removeLife(){
+        setInterval(()=>{
 
+            this.attributes.removeLife(this.x, this.y)
+        }, 600)
+    }
     /**
      * @param {*} x movements left/right
      * @param {*} y movements up/down
@@ -92,7 +101,7 @@ export class Player {
         this.attributes.addLife(x,y);
         this.attributes.addBomb(x,y);
         this.attributes.addDamageBomb(x,y);
-        this.attributes.removeLife(x,y)
+        
     }
 
     /**
@@ -345,8 +354,10 @@ export class Player {
         divPlayer.appendChild(flame);
         map.grounds[yFlame][xFlame].flame = true;
 
-
-        if (map.grounds[yFlame][xFlame].bomb) {
+        this.flameAndBomb(xFlame, yFlame, map.grounds[yFlame][xFlame].bomb.id);
+        /*
+        let mineBomb =  this.bombs.find(e => e.id == map.grounds[yFlame][xFlame].bomb.id)
+        if (map.grounds[yFlame][xFlame].bomb && mineBomb) {
 
             if (map.grounds[yFlame][xFlame].bomb.timeout) {
                 clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
@@ -357,6 +368,7 @@ export class Player {
 
             }
         }
+        */
         setTimeout(() => {
             map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
             map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
@@ -364,8 +376,25 @@ export class Player {
             flame.remove();
         }, 1000)
 
-        if(xFlame == this.x && yFlame == this.y){
-            this.attributes.removeLife(this.x, this.y);}
+        
+    }
+    flameAndBomb(xFlame, yFlame, idBomb){
+        let mineBomb =  this.bombs.find(e => e.id == idBomb)
+        if (map.grounds[yFlame][xFlame].bomb && mineBomb) {
+
+            if (map.grounds[yFlame][xFlame].bomb.timeout) {
+                clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
+                map.grounds[yFlame][xFlame].bomb.timeout = null;
+                setTimeout(() => {
+                    this.detonate(map.grounds[yFlame][xFlame].bomb)
+                }, 150)
+
+            }
+        }
+        /*
+        if(map.grounds[yFlame][xFlame].bomb && !mineBomb && this.nbTryDetonate != 1 ){
+            map.bombOthers(xFlame, yFlame, idBomb, this)
+        } */
     }
 }
 

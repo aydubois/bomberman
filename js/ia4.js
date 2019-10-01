@@ -33,9 +33,11 @@ export class Ia {
         this.intervalUnblock = null;
         this.intervalDebug = null;
         this.intervalRemoveLife = null;
-
+        this.removeLife()
+        this.nbTryDetonate = 0;
 
         this.debug();
+        map.initAll(this)
     }
 
     initPosition() {
@@ -81,6 +83,13 @@ export class Ia {
         }, 4000);
         this.intervalBomb = intervalBomb;
 
+    }
+
+    removeLife(){
+        var intervalRemoveLife = setInterval(()=>{
+            this.attributes.removeLife(this.x, this.y)
+        }, 600)
+        this.intervalRemoveLife = intervalRemoveLife;
     }
     searchBonus() {
 
@@ -273,7 +282,6 @@ export class Ia {
             this.attributes.addLife(x, y);
             this.attributes.addBomb(x, y);
             this.attributes.addDamageBomb(x, y);
-            this.attributes.removeLife(x, y)
         }
         let sizePosition = this.historyPositions.length;
         if (sizePosition >= 6) {
@@ -336,19 +344,28 @@ export class Ia {
 
                     this.putBomb();
                     setTimeout(() => {
-                        this.yNext = 0;
-                        this.xNext = -1;
-                        this.move()
+                        if(!this.attributes.dead){
+
+                            this.yNext = 0;
+                            this.xNext = -1;
+                            this.move()
+                        }
                     }, 800)
                     setTimeout(() => {
-                        this.yNext = 1;
-                        this.xNext = 0;
-                        this.move();
+                        if(!this.attributes.dead){
+
+                            this.yNext = 1;
+                            this.xNext = 0;
+                            this.move();
+                        }
                     }, 1600)
                     setTimeout(() => {
-                        this.startIa();
-                        this.unblock();
-                        this.startBomb();
+                        if(!this.attributes.dead){
+
+                            this.startIa();
+                            this.unblock();
+                            this.startBomb();
+                        }
                     }, 2001)
                 } 
             //gauche - haut
@@ -368,19 +385,28 @@ export class Ia {
 
                     this.putBomb();
                     setTimeout(() => {
-                        this.yNext = 0;
-                        this.xNext = -1;
-                        this.move()
+                        if(!this.attributes.dead){
+
+                            this.yNext = 0;
+                            this.xNext = -1;
+                            this.move()
+                        }
                     }, 800)
                     setTimeout(() => {
-                        this.yNext = -1;
-                        this.xNext = 0;
-                        this.move();
+                        if(!this.attributes.dead){
+
+                            this.yNext = -1;
+                            this.xNext = 0;
+                            this.move();
+                        }
                     }, 1600)
                     setTimeout(() => {
-                        this.startIa();
-                        this.unblock();
-                        this.startBomb();
+                        if(!this.attributes.dead){
+
+                            this.startIa();
+                            this.unblock();
+                            this.startBomb();
+                        }
                     }, 2001)
 
                 }
@@ -402,19 +428,28 @@ export class Ia {
 
                         this.putBomb();
                         setTimeout(() => {
-                            this.yNext = 0;
-                            this.xNext = 1;
-                            this.move()
+                            if(!this.attributes.dead){
+
+                                this.yNext = 0;
+                                this.xNext = 1;
+                                this.move()
+                            }
                         }, 800)
                         setTimeout(() => {
-                            this.yNext = 1;
-                            this.xNext = 0;
-                            this.move();
+                            if(!this.attributes.dead){
+
+                                this.yNext = 1;
+                                this.xNext = 0;
+                                this.move();
+                            }
                         }, 1600)
                         setTimeout(() => {
-                            this.startIa();
-                            this.unblock();
-                            this.startBomb();
+                            if(!this.attributes.dead){
+
+                                this.startIa();
+                                this.unblock();
+                                this.startBomb();
+                            }
                         }, 2001)
                     } 
             //droite - haut       
@@ -434,19 +469,28 @@ export class Ia {
 
                             this.putBomb();
                             setTimeout(()=>{
-                                this.yNext = 0;
-                                this.xNext = 1;
-                                this.move()
+                                if(!this.attributes.dead){
+
+                                    this.yNext = 0;
+                                    this.xNext = 1;
+                                    this.move()
+                                }
                             }, 800)
                             setTimeout(()=>{
-                                this.yNext = -1;
-                                this.xNext = 0;
-                                this.move();
+                                if(!this.attributes.dead){
+
+                                    this.yNext = -1;
+                                    this.xNext = 0;
+                                    this.move();
+                                }
                             },1600)
                             setTimeout(()=>{
-                                this.startIa();
-                                this.unblock();
-                                this.startBomb();
+                                if(!this.attributes.dead){
+
+                                    this.startIa();
+                                    this.unblock();
+                                    this.startBomb();
+                                }
                             }, 2001)
                 }
             
@@ -467,19 +511,28 @@ export class Ia {
 
                             this.putBomb();
                             setTimeout(()=>{
-                                this.yNext = -1;
-                                this.xNext = 0;
-                                this.move()
+                                if(!this.attributes.dead){
+
+                                    this.yNext = -1;
+                                    this.xNext = 0;
+                                    this.move()
+                                }
                             }, 800)
                             setTimeout(()=>{
-                                this.yNext = 0;
-                                this.xNext = -1;
-                                this.move();
+                                if(!this.attributes.dead){
+
+                                    this.yNext = 0;
+                                    this.xNext = -1;
+                                    this.move();
+                                }
                             },1600)
                             setTimeout(()=>{
-                                this.startIa();
-                                this.unblock();
-                                this.startBomb();
+                                if(!this.attributes.dead){
+
+                                    this.startIa();
+                                    this.unblock();
+                                    this.startBomb();
+                                }
                             }, 2001)
                         }
             //haut - droite        
@@ -498,19 +551,28 @@ export class Ia {
                         clearInterval(this.intervalBomb)
                             this.putBomb();
                             setTimeout(()=>{
-                                this.yNext = -1;
-                                this.xNext = 0;
-                                this.move()
+                                if(!this.attributes.dead){
+
+                                    this.yNext = -1;
+                                    this.xNext = 0;
+                                    this.move()
+                                }
                             }, 800)
                             setTimeout(()=>{
-                                this.yNext = 0;
-                                this.xNext = 1;
-                                this.move();
+                                if(!this.attributes.dead){
+
+                                    this.yNext = 0;
+                                    this.xNext = 1;
+                                    this.move();
+                                }
                             },1600)
                             setTimeout(()=>{
-                                this.startIa();
-                                this.unblock();
-                                this.startBomb();
+                                if(!this.attributes.dead){
+
+                                    this.startIa();
+                                    this.unblock();
+                                    this.startBomb();
+                                }
                             }, 2001)
                 }
             //bas - gauche
@@ -530,19 +592,28 @@ export class Ia {
 
                             this.putBomb();
                             setTimeout(()=>{
-                                this.yNext = 1;
-                                this.xNext = 0;
-                                this.move()
+                                if(!this.attributes.dead){
+
+                                    this.yNext = 1;
+                                    this.xNext = 0;
+                                    this.move()
+                                }
                             }, 800)
                             setTimeout(()=>{
-                                this.yNext = 0;
-                                this.xNext = -1;
-                                this.move();
+                                if(!this.attributes.dead){
+
+                                    this.yNext = 0;
+                                    this.xNext = -1;
+                                    this.move();
+                                }
                             },1600)
                             setTimeout(()=>{                                
-                                this.startIa();
-                                this.unblock();
-                                this.startBomb();
+                                if(!this.attributes.dead){
+
+                                    this.startIa();
+                                    this.unblock();
+                                    this.startBomb();
+                                }
                             }, 2001)
                         }
             //bas - droite
@@ -561,19 +632,28 @@ export class Ia {
                     clearInterval(this.intervalBomb)
                             this.putBomb();
                             setTimeout(()=>{
-                                this.yNext = 1;
-                                this.xNext = 0;
-                                this.move()
+                                if(!this.attributes.dead){
+
+                                    this.yNext = 1;
+                                    this.xNext = 0;
+                                    this.move()
+                                }
                             }, 800)
                             setTimeout(()=>{
-                                this.yNext = 0;
-                                this.xNext = 1;
-                                this.move();
+                                if(!this.attributes.dead){
+                                    
+                                    this.yNext = 0;
+                                    this.xNext = 1;
+                                    this.move();
+                                }
                             },1600)
                             setTimeout(()=>{
-                                this.startIa();
-                                this.unblock();
-                                this.startBomb();
+                                if(!this.attributes.dead){
+
+                                    this.startIa();
+                                    this.unblock();
+                                    this.startBomb();
+                                }
                             }, 2001)
                 
             }
@@ -793,51 +873,34 @@ export class Ia {
         divPlayer.appendChild(flame);
         map.grounds[yFlame][xFlame].flame = true;
 
+        this.flameAndBomb(xFlame, yFlame, map.grounds[yFlame][xFlame].bomb.id);
 
+        setTimeout(() => {
+            map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
+            map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
+            map.grounds[yFlame][xFlame].flame = false;
+            flame.remove();
+        }, 800)
+    }
 
-        if (map.grounds[yFlame][xFlame].bomb) {
+    flameAndBomb(xFlame, yFlame, idBomb){
+        let mineBomb =  this.bombs.find(e => e.id == idBomb)
+        if (map.grounds[yFlame][xFlame].bomb && mineBomb) {
 
             if (map.grounds[yFlame][xFlame].bomb.timeout) {
                 clearTimeout(map.grounds[yFlame][xFlame].bomb.timeout)
                 map.grounds[yFlame][xFlame].bomb.timeout = null;
-
                 setTimeout(() => {
                     this.detonate(map.grounds[yFlame][xFlame].bomb)
                 }, 150)
 
             }
-            map.grounds[yFlame][xFlame].bomb = false;
         }
-
-        let nblife = this.attributes.attribut.life;
-        var intervalRemoveLife = setInterval(() => {
-            if (xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame) {
-                if (nblife == this.attributes.attribut.life) {
-                    this.attributes.removeLife(this.x, this.y);
-                    clearInterval(intervalRemoveLife)
-                }
-            }
-
-        }, 800)
-        setTimeout(() => {
-            map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
-            map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
-            map.grounds[yFlame][xFlame].flame = false;
-            map.grounds[yFlame][xFlame].futureflame = false;
-
-            flame.remove();
-            clearInterval(() => {
-                if (xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame) {
-                    if (nblife == this.attributes.attribut.life) {
-                        this.attributes.removeLife(this.x, this.y);
-                    }
-                }
-
-            });
-
-        }, 1000)
-        this.intervalRemoveLife = intervalRemoveLife;
-
+        /*
+        if(map.grounds[yFlame][xFlame].bomb && !mineBomb && this.nbTryDetonate !=1){
+            map.bombOthers(xFlame, yFlame, idBomb, this)
+            this.nbTryDetonate = 1
+        }*/
     }
 
     stopIA() {

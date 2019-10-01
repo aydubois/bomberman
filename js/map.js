@@ -15,6 +15,11 @@ export class Map{
         this.bonusItems = [
             "life", "bomb", "damage"
         ]
+        this.nb = 0
+        this.player1 = null;
+        this.ia1 = null;
+        this.ia2 = null;
+        this.ia3 = null;
     }
 
     initSet(rows, columns){
@@ -206,6 +211,73 @@ export class Map{
             player.move(xFinal, yFinal);
         }
     }
+
+    initAll(player){
+        if(this.nb == 0){
+            this.player1 = player
+        }
+        if(this.nb == 1){
+            this.ia1 = player
+        }
+        if(this.nb == 2){
+            this.ia2 = player
+        }
+        if(this.nb == 3){
+            this.ia3 = player
+        }
+        this.nb++
+    }
+
+    /*
+    deleteDead(number){
+        if(this.ia1.number = number){
+            this.ia1 = null;
+        }
+        if(this.ia2.number = number){
+            this.ia2 = null;
+        }
+        if(this.ia3.number = number){
+            this.ia3 = null;
+        }
+    } */
+/*
+    bombOthers(xFlame, yFlame, idBomb, player){
+        
+        if(nbEnemy >= 1 && this.ia1){
+            if(player != this.ia1 && this.ia1.nbTryDetonate != 1){
+                this.ia1.flameAndBomb(xFlame, yFlame, idBomb)
+                this.ia1.nbTryDetonate = 1;
+            }
+            if(player != this.player1 && this.player1.nbTryDetonate != 1 ){
+                this.player1.flameAndBomb(xFlame, yFlame, idBomb)
+                this.player1.nbTryDetonate = 1;
+            }
+        }
+        if(nbEnemy >= 2 && this.ia2){
+            if(player != this.ia2 && this.ia2.nbTryDetonate != 0){
+                this.ia2.flameAndBomb(xFlame, yFlame, idBomb)
+                this.ia2.nbTryDetonate = 1;
+            }
+        }
+        if(nbEnemy == 3 && this.ia3){
+            if(player != this.ia3 && this.ia3.nbTryDetonate != 1 ){
+                this.ia3.flameAndBomb(xFlame, yFlame, idBomb)
+                this.ia3.nbTryDetonate = 1;
+            }
+        }
+        setTimeout(()=>{
+            this.player1.nbTryDetonate = 0;
+            if(this.ia1){
+                this.ia1.nbTryDetonate = 0;
+            }
+            if(this.ia2){
+                this.ia2.nbTryDetonate = 0;
+            }
+            if(this.ia3){
+                this.ia3.nbTryDetonate = 0;
+            }
+        }, 2000)
+    } */
 
 }
 

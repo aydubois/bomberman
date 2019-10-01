@@ -70,7 +70,7 @@ class GameStarter {
         }
     }
     
-
+    
     endGame(){
         let end = document.createElement("div");
         end.setAttribute("id", "end");

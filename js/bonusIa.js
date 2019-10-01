@@ -34,6 +34,7 @@ export class AttributesIa {
 
             if (this.attribut.life <= 0) {
                 this.dead = true;
+                //map.deleteDead(this.attribut.number)
                 document.getElementById(`player${this.attribut.number}`).remove();
                 document.getElementById("sentence").textContent = "le joueur " + this.attribut.number + " est mort";
             }
