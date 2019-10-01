@@ -79,9 +79,9 @@ class GameStarter {
         let divGame = document.getElementById('game');
         
         if(this.player1.attributes.attribut.life == 0){
-            ia1 = null;
-            ia2 = null;
-            ia3 = null;
+            this.ia1 = null;
+            this.ia2 = null;
+            this.ia3 = null;
             clearInterval(this.intervalEnd)
             return
         }
@@ -90,9 +90,9 @@ class GameStarter {
             document.getElementById("start").textContent = "Remise à zéro";
             document.getElementById("main_wrapper").replaceChild(end, divGame);
             document.getElementById("main_wrapper").removeChild(divPlayer);
-            ia1 = null;
-            ia2 = null;
-            ia3 = null;
+            this.ia1 = null;
+            this.ia2 = null;
+            this.ia3 = null;
             clearInterval(this.intervalEnd);
 
         } else if(nbEnemy == 2 && this.ia1.attributes.attribut.life == 0 && this.ia2.attributes.attribut.life == 0){
@@ -100,8 +100,8 @@ class GameStarter {
 
             document.getElementById("main_wrapper").replaceChild(end, divGame);
             document.getElementById("main_wrapper").removeChild(divPlayer);
-            ia1 = null;
-            ia2 = null;
+            this.ia1 = null;
+            this.ia2 = null;
             clearInterval(this.intervalEnd);
             
         } 
