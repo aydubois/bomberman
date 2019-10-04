@@ -79,6 +79,7 @@ export class Player {
             this.attributes.removeLife(this.x, this.y)
         }, 600)
     }
+    
     /**
      * @param {*} x movements left/right
      * @param {*} y movements up/down
