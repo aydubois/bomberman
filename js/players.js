@@ -275,8 +275,6 @@ export class Player {
                 }
                 break;
             }
-
-
         }
     }
     /**
@@ -397,5 +395,3 @@ export class Player {
         } */
     }
 }
-
-/// ajouter bonus à chaque perso

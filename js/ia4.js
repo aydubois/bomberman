@@ -26,7 +26,7 @@ export class Ia {
         this.historyPositions = [];
         map.allPositions[1] = this.positionActuel;
         this.nextMouvement = null;
-        
+
 
         this.intervalStart = null;
         this.intervalBomb = null;
@@ -72,8 +72,8 @@ export class Ia {
             }
         }, 800);
         this.intervalStart = intervalStart;
-        
-        
+
+
     }
     startBomb() {
         var intervalBomb = setInterval(() => {
@@ -85,8 +85,8 @@ export class Ia {
 
     }
 
-    removeLife(){
-        var intervalRemoveLife = setInterval(()=>{
+    removeLife() {
+        var intervalRemoveLife = setInterval(() => {
             this.attributes.removeLife(this.x, this.y)
         }, 600)
         this.intervalRemoveLife = intervalRemoveLife;
@@ -323,7 +323,7 @@ export class Ia {
             return;
         } else {
 
-            
+
             //si possibilité de s'échapper
 
             //gauche - bas
@@ -334,328 +334,328 @@ export class Ia {
                 !map.grounds[this.y + 1][this.x - 1].softWall &&
                 !map.grounds[this.y + 1][this.x - 1].hardWall &&
                 !map.grounds[this.y + 1][this.x - 1].bomb) {
-                
-                    console.log("gauche")
-                    console.log("bas")
 
-                    clearInterval(this.intervalStart)
-                    clearInterval(this.intervalUnblock)
-                    clearInterval(this.intervalBomb)
+                console.log("gauche")
+                console.log("bas")
 
-                    this.putBomb();
-                    setTimeout(() => {
-                        if(!this.attributes.dead){
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
 
-                            this.yNext = 0;
-                            this.xNext = -1;
-                            this.move()
-                        }
-                    }, 800)
-                    setTimeout(() => {
-                        if(!this.attributes.dead){
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                            this.yNext = 1;
-                            this.xNext = 0;
-                            this.move();
-                        }
-                    }, 1600)
-                    setTimeout(() => {
-                        if(!this.attributes.dead){
+                        this.yNext = 0;
+                        this.xNext = -1;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                            this.startIa();
-                            this.unblock();
-                            this.startBomb();
-                        }
-                    }, 2001)
-                } 
+                        this.yNext = 1;
+                        this.xNext = 0;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
+
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
+            }
             //gauche - haut
             else if (!map.grounds[this.y][this.x - 1].softWall &&
-                    !map.grounds[this.y][this.x - 1].hardWall &&
-                    !map.grounds[this.y][this.x - 1].bomb &&
-                    !map.grounds[this.y - 1][this.x - 1].softWall &&
-                    !map.grounds[this.y - 1][this.x - 1].hardWall &&
-                    !map.grounds[this.y - 1][this.x - 1].bomb) {
+                !map.grounds[this.y][this.x - 1].hardWall &&
+                !map.grounds[this.y][this.x - 1].bomb &&
+                !map.grounds[this.y - 1][this.x - 1].softWall &&
+                !map.grounds[this.y - 1][this.x - 1].hardWall &&
+                !map.grounds[this.y - 1][this.x - 1].bomb) {
 
-                        console.log("gauche")
-                        console.log("haut")
+                console.log("gauche")
+                console.log("haut")
 
-                        clearInterval(this.intervalStart)
-                        clearInterval(this.intervalUnblock)
-                        clearInterval(this.intervalBomb)
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
 
-                    this.putBomb();
-                    setTimeout(() => {
-                        if(!this.attributes.dead){
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                            this.yNext = 0;
-                            this.xNext = -1;
-                            this.move()
-                        }
-                    }, 800)
-                    setTimeout(() => {
-                        if(!this.attributes.dead){
+                        this.yNext = 0;
+                        this.xNext = -1;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                            this.yNext = -1;
-                            this.xNext = 0;
-                            this.move();
-                        }
-                    }, 1600)
-                    setTimeout(() => {
-                        if(!this.attributes.dead){
+                        this.yNext = -1;
+                        this.xNext = 0;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                            this.startIa();
-                            this.unblock();
-                            this.startBomb();
-                        }
-                    }, 2001)
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
 
-                }
-            
+            }
+
             //droite - bas
             else if (!map.grounds[this.y][this.x + 1].softWall &&
                 !map.grounds[this.y][this.x + 1].hardWall &&
                 !map.grounds[this.y][this.x + 1].bomb &&
-                !map.grounds[this.y + 1][this.x +1].softWall &&
-                !map.grounds[this.y + 1][this.x +1].hardWall &&
-                !map.grounds[this.y + 1][this.x +1].bomb) {
+                !map.grounds[this.y + 1][this.x + 1].softWall &&
+                !map.grounds[this.y + 1][this.x + 1].hardWall &&
+                !map.grounds[this.y + 1][this.x + 1].bomb) {
 
-                    console.log("droite")
-                    console.log("bas")
-                    
-                    clearInterval(this.intervalStart)
-                    clearInterval(this.intervalUnblock)
-                    clearInterval(this.intervalBomb)
+                console.log("droite")
+                console.log("bas")
 
-                        this.putBomb();
-                        setTimeout(() => {
-                            if(!this.attributes.dead){
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
 
-                                this.yNext = 0;
-                                this.xNext = 1;
-                                this.move()
-                            }
-                        }, 800)
-                        setTimeout(() => {
-                            if(!this.attributes.dead){
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                this.yNext = 1;
-                                this.xNext = 0;
-                                this.move();
-                            }
-                        }, 1600)
-                        setTimeout(() => {
-                            if(!this.attributes.dead){
+                        this.yNext = 0;
+                        this.xNext = 1;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                this.startIa();
-                                this.unblock();
-                                this.startBomb();
-                            }
-                        }, 2001)
-                    } 
+                        this.yNext = 1;
+                        this.xNext = 0;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
+
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
+            }
             //droite - haut       
             else if (!map.grounds[this.y][this.x + 1].softWall &&
-                    !map.grounds[this.y][this.x + 1].hardWall &&
-                    !map.grounds[this.y][this.x + 1].bomb &&
-                    !map.grounds[this.y - 1][this.x +1].softWall &&
-                    !map.grounds[this.y - 1][this.x +1].hardWall &&
-                    !map.grounds[this.y - 1][this.x +1].bomb) {
+                !map.grounds[this.y][this.x + 1].hardWall &&
+                !map.grounds[this.y][this.x + 1].bomb &&
+                !map.grounds[this.y - 1][this.x + 1].softWall &&
+                !map.grounds[this.y - 1][this.x + 1].hardWall &&
+                !map.grounds[this.y - 1][this.x + 1].bomb) {
 
-                        console.log("droite")
-                        console.log("haut")
+                console.log("droite")
+                console.log("haut")
 
-                            clearInterval(this.intervalStart)
-                            clearInterval(this.intervalUnblock)
-                            clearInterval(this.intervalBomb)
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
 
-                            this.putBomb();
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.yNext = 0;
-                                    this.xNext = 1;
-                                    this.move()
-                                }
-                            }, 800)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                        this.yNext = 0;
+                        this.xNext = 1;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.yNext = -1;
-                                    this.xNext = 0;
-                                    this.move();
-                                }
-                            },1600)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                        this.yNext = -1;
+                        this.xNext = 0;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.startIa();
-                                    this.unblock();
-                                    this.startBomb();
-                                }
-                            }, 2001)
-                }
-            
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
+            }
+
             //haut - gauche
             else if (!map.grounds[this.y - 1][this.x].softWall &&
-                    !map.grounds[this.y - 1][this.x].hardWall &&
-                    !map.grounds[this.y - 1][this.x].bomb &&
-                    !map.grounds[this.y - 1][this.x - 1].softWall  &&
-                    !map.grounds[this.y - 1][this.x - 1].hardWall &&
-                    !map.grounds[this.y - 1][this.x - 1].bomb){
+                !map.grounds[this.y - 1][this.x].hardWall &&
+                !map.grounds[this.y - 1][this.x].bomb &&
+                !map.grounds[this.y - 1][this.x - 1].softWall &&
+                !map.grounds[this.y - 1][this.x - 1].hardWall &&
+                !map.grounds[this.y - 1][this.x - 1].bomb) {
 
-                        console.log("haut")
-                        console.log("gauche")
-                            
-                        clearInterval(this.intervalStart)
-                        clearInterval(this.intervalUnblock)
-                        clearInterval(this.intervalBomb)
+                console.log("haut")
+                console.log("gauche")
 
-                            this.putBomb();
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
 
-                                    this.yNext = -1;
-                                    this.xNext = 0;
-                                    this.move()
-                                }
-                            }, 800)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.yNext = 0;
-                                    this.xNext = -1;
-                                    this.move();
-                                }
-                            },1600)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                        this.yNext = -1;
+                        this.xNext = 0;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.startIa();
-                                    this.unblock();
-                                    this.startBomb();
-                                }
-                            }, 2001)
-                        }
+                        this.yNext = 0;
+                        this.xNext = -1;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
+
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
+            }
             //haut - droite        
-            else if(!map.grounds[this.y - 1][this.x].softWall &&
-                    !map.grounds[this.y - 1][this.x].hardWall &&
-                    !map.grounds[this.y - 1][this.x].bomb &&
-                    !map.grounds[this.y -1][this.x + 1].softWall    &&
-                    !map.grounds[this.y -1][this.x + 1].hardWall &&
-                    !map.grounds[this.y -1][this.x + 1].bomb) {
+            else if (!map.grounds[this.y - 1][this.x].softWall &&
+                !map.grounds[this.y - 1][this.x].hardWall &&
+                !map.grounds[this.y - 1][this.x].bomb &&
+                !map.grounds[this.y - 1][this.x + 1].softWall &&
+                !map.grounds[this.y - 1][this.x + 1].hardWall &&
+                !map.grounds[this.y - 1][this.x + 1].bomb) {
 
-                        console.log("haut")
-                        console.log("droite")
-                        
-                        clearInterval(this.intervalStart)
-                        clearInterval(this.intervalUnblock)
-                        clearInterval(this.intervalBomb)
-                            this.putBomb();
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                console.log("haut")
+                console.log("droite")
 
-                                    this.yNext = -1;
-                                    this.xNext = 0;
-                                    this.move()
-                                }
-                            }, 800)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.yNext = 0;
-                                    this.xNext = 1;
-                                    this.move();
-                                }
-                            },1600)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                        this.yNext = -1;
+                        this.xNext = 0;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.startIa();
-                                    this.unblock();
-                                    this.startBomb();
-                                }
-                            }, 2001)
-                }
+                        this.yNext = 0;
+                        this.xNext = 1;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
+
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
+            }
             //bas - gauche
             else if (!map.grounds[this.y + 1][this.x].softWall &&
                 !map.grounds[this.y + 1][this.x].hardWall &&
                 !map.grounds[this.y + 1][this.x].bomb &&
-                !map.grounds[this.y +1][this.x - 1].softWall  &&
-                !map.grounds[this.y +1][this.x - 1].hardWall &&
-                !map.grounds[this.y +1][this.x - 1].bomb){
+                !map.grounds[this.y + 1][this.x - 1].softWall &&
+                !map.grounds[this.y + 1][this.x - 1].hardWall &&
+                !map.grounds[this.y + 1][this.x - 1].bomb) {
 
-                    console.log("bas")
-                    console.log("gauche")
+                console.log("bas")
+                console.log("gauche")
 
-                        clearInterval(this.intervalStart)
-                        clearInterval(this.intervalUnblock)
-                        clearInterval(this.intervalBomb)
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
 
-                            this.putBomb();
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.yNext = 1;
-                                    this.xNext = 0;
-                                    this.move()
-                                }
-                            }, 800)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                        this.yNext = 1;
+                        this.xNext = 0;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.yNext = 0;
-                                    this.xNext = -1;
-                                    this.move();
-                                }
-                            },1600)
-                            setTimeout(()=>{                                
-                                if(!this.attributes.dead){
+                        this.yNext = 0;
+                        this.xNext = -1;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.startIa();
-                                    this.unblock();
-                                    this.startBomb();
-                                }
-                            }, 2001)
-                        }
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
+            }
             //bas - droite
-            else if(!map.grounds[this.y + 1][this.x].softWall &&
-                    !map.grounds[this.y + 1][this.x].hardWall &&
-                    !map.grounds[this.y + 1][this.x].bomb &&
-                    !map.grounds[this.y +1][this.x + 1].softWall  &&
-                    !map.grounds[this.y +1][this.x + 1].hardWall &&
-                    !map.grounds[this.y +1][this.x + 1].bomb) {
+            else if (!map.grounds[this.y + 1][this.x].softWall &&
+                !map.grounds[this.y + 1][this.x].hardWall &&
+                !map.grounds[this.y + 1][this.x].bomb &&
+                !map.grounds[this.y + 1][this.x + 1].softWall &&
+                !map.grounds[this.y + 1][this.x + 1].hardWall &&
+                !map.grounds[this.y + 1][this.x + 1].bomb) {
 
-                        console.log("bas")
-                        console.log("droite")
+                console.log("bas")
+                console.log("droite")
 
-                            clearInterval(this.intervalStart)
-                    clearInterval(this.intervalUnblock)
-                    clearInterval(this.intervalBomb)
-                            this.putBomb();
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                clearInterval(this.intervalStart)
+                clearInterval(this.intervalUnblock)
+                clearInterval(this.intervalBomb)
+                this.putBomb();
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.yNext = 1;
-                                    this.xNext = 0;
-                                    this.move()
-                                }
-                            }, 800)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
-                                    
-                                    this.yNext = 0;
-                                    this.xNext = 1;
-                                    this.move();
-                                }
-                            },1600)
-                            setTimeout(()=>{
-                                if(!this.attributes.dead){
+                        this.yNext = 1;
+                        this.xNext = 0;
+                        this.move()
+                    }
+                }, 800)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
 
-                                    this.startIa();
-                                    this.unblock();
-                                    this.startBomb();
-                                }
-                            }, 2001)
-                
+                        this.yNext = 0;
+                        this.xNext = 1;
+                        this.move();
+                    }
+                }, 1600)
+                setTimeout(() => {
+                    if (!this.attributes.dead) {
+
+                        this.startIa();
+                        this.unblock();
+                        this.startBomb();
+                    }
+                }, 2001)
+
             }
         }
     }
@@ -883,8 +883,8 @@ export class Ia {
         }, 800)
     }
 
-    flameAndBomb(xFlame, yFlame, idBomb){
-        let mineBomb =  this.bombs.find(e => e.id == idBomb)
+    flameAndBomb(xFlame, yFlame, idBomb) {
+        let mineBomb = this.bombs.find(e => e.id == idBomb)
         if (map.grounds[yFlame][xFlame].bomb && mineBomb) {
 
             if (map.grounds[yFlame][xFlame].bomb.timeout) {
