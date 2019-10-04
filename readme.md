@@ -24,6 +24,6 @@ First of all you must register to be able to play (the goal is to keep your scor
 Use the arrows to move around and the escape bar to place bombs.
 
 ### Clarification on 'AI'
-Only the ia2.js file is used. The other ia.js files are tests, so is the AI folder.
+Only the ia4.js file is used. The other ia.js files are tests, so is the AI folder.
 The game is still under construction. Algorithms are not yet "perfect".
 

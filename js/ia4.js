@@ -88,7 +88,7 @@ export class Ia {
     removeLife() {
         var intervalRemoveLife = setInterval(() => {
             this.attributes.removeLife(this.x, this.y)
-        }, 600)
+        }, 700)
         this.intervalRemoveLife = intervalRemoveLife;
     }
     searchBonus() {

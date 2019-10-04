@@ -30,6 +30,7 @@ export class Ia {
         this.arrayIntervals =[];
 
         this.debug();
+        this.removeLife();
     }
 
     initPosition() {
@@ -73,6 +74,13 @@ export class Ia {
 
     }
 
+    removeLife(){
+        var intervalRemoveLife = setInterval(()=>{
+
+            this.attributes.removeLife(this.x, this.y)
+        }, 600)
+        this.arrayIntervals.push(intervalRemoveLife);
+    }
     searchDirectionTarget() {
         let xposition = this.x;
         let yposition = this.y;
@@ -225,7 +233,6 @@ export class Ia {
         this.attributes.addLife(x,y);
         this.attributes.addBomb(x,y);
         this.attributes.addDamageBomb(x,y);
-        this.attributes.removeLife(x,y)
         
     }
     
@@ -476,13 +483,7 @@ export class Ia {
             map.grounds[yFlame][xFlame].bomb = false;
         }
 
-        let nblife = this.attributes.attribut.life;
-        var intervalRemoveLife = setInterval(()=>{
-            if(xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame == true){
-                if(nblife == this.attributes.attribut.life){
-                this.attributes.removeLife(this.x, this.y);}}
-            
-        },1000)
+     
         setTimeout(() => {
             map.grounds[yFlame][xFlame].block.style.backgroundImage = "none";
             map.grounds[yFlame][xFlame].block.style.backgroundColor = "#E4CD8E";
@@ -490,15 +491,9 @@ export class Ia {
             map.grounds[yFlame][xFlame].futureflame = false;
 
             flame.remove();
-            clearInterval(()=>{
-                if(xFlame == this.x && yFlame == this.y || map.grounds[yFlame][xFlame].flame == true){
-                    if(nblife == this.attributes.attribut.life){
-                    this.attributes.removeLife(this.x, this.y);}}
-                
-            });
+            
             
         }, 1000)
-        this.arrayIntervals.push(intervalRemoveLife);
 
     }
 
